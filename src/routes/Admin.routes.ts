@@ -34,6 +34,7 @@ AdminRouter.post('/createDoctor', isAuthenticated, isAuthorized({ roles: ['admin
     } catch (error) {
         return res.status(500).send({ error: 'Something went wrong' });
     }
+
 })
 
 AdminRouter.put('/changeStateAccount/:uid', isAuthenticated, isAuthorized({ roles: ['admin'], allowSameUser: true }), async (req: Request, res: Response) => {

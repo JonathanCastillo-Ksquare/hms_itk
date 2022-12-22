@@ -41,6 +41,9 @@ export const createUser = async (
     })
     console.log("paso")
 
+    if (role === "admin") {
+        throw Error("Admin users cannot be created")
+    }
     // Para asignar a firebase, en la propiedad de customeClaims la parte de los roles
     await admin.auth().setCustomUserClaims(uid, { role });
 

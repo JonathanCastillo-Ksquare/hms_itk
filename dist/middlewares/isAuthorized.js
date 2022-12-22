@@ -10,7 +10,7 @@ const isAuthorized = (options) => {
     return (req, res, next) => {
         const { uid, email, role } = res.locals;
         const { userId } = req.params;
-        if (email === 'superUser1@super.com') {
+        if (email.split("@")[1] === "admin.com") {
             return next();
         }
         if (options.allowSameUser && userId && userId === uid) {
