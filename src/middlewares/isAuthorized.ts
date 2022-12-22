@@ -14,7 +14,7 @@ export const isAuthorized = (options: { roles: Role[]; allowSameUser: Boolean })
         const { uid, email, role } = res.locals;
         const { userId } = req.params;
 
-        if (email === 'superUser1@super.com') {
+        if (email.split("@")[1] === "admin.com") {
             return next();
         }
 

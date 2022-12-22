@@ -1,8 +1,6 @@
 import { Router, Request, Response } from "express";
-import { createUser, readUser, getAllUsers, updateUser, disableUser, getUserByEmail } from "../firebase";
+import { createUser, getAllUsers, disableUser } from "../firebase";
 import { isAuthenticated } from "../middlewares/isAuthenticated";
-import { isAuthorized } from "../middlewares/isAuthorized";
-import * as admin from "firebase-admin";
 import { createPatient } from "../repository/Patient.repo";
 
 export const AuthRouter = Router();
@@ -30,6 +28,7 @@ AuthRouter.post('/signUp', async (req: Request, res: Response) => {
         res.status(400).json({ error: "El email ya existe" });
     }
 
+
     try {
         const userId = await createUser(displayName, email, password, 'patient');
         await createPatient(userId);
@@ -43,10 +42,7 @@ AuthRouter.post('/signUp', async (req: Request, res: Response) => {
 })
 
 AuthRouter.put('/deleteAccount', isAuthenticated, async (req: Request, res: Response) => {
-    // Dos formas de obtener el userId
-    //1ra forma
-    // const { userId } = req.params;
-    //2da forma
+
     const { uid } = res.locals;
 
     const { disabled } = req.body;
@@ -74,44 +70,3 @@ AuthRouter.get('/getAll', async (req: Request, res: Response) => {
     }
 
 })
-
-AuthRouter.post('/logIn', async (req: Request, res: Response) => {
-    const { email, passwrd } = req.body;
-
-    const users = await getAllUsers();
-
-    let user = users.find((user) => {
-        return user.email === email
-    })
-
-    if (!user) {
-        return res.status(400).json({ error: "Invalid crendetials" });
-    }
-    const uid = user?.uid
-
-    try {
-        const additionalClaims = {
-            premiumAccount: true,
-        };
-
-        admin.auth()
-            .createCustomToken(uid, additionalClaims)
-            .then((customToken) => {
-                return res.status(201).send({
-                    token: customToken,
-                    user: user
-                })
-            })
-            .catch((error) => {
-                console.log('Error creating custom token:', error);
-            });
-
-
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send({ error: 'Something went wrong' });
-
-    }
-
-})
-

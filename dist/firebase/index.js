@@ -56,6 +56,9 @@ displayName, email, password, role) => __awaiter(void 0, void 0, void 0, functio
         password
     });
     console.log("paso");
+    if (role === "admin") {
+        throw Error("Admin users cannot be created");
+    }
     // Para asignar a firebase, en la propiedad de customeClaims la parte de los roles
     yield admin.auth().setCustomUserClaims(uid, { role });
     return uid;
