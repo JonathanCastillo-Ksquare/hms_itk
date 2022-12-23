@@ -34,7 +34,8 @@ const initAppointmentsModel = (sequelize) => __awaiter(void 0, void 0, void 0, f
         tableName: "appointments",
         sequelize: sequelize,
         // For soft delete
-        paranoid: true
+        paranoid: true,
+        deletedAt: 'destroyTime'
     });
 });
 exports.initAppointmentsModel = initAppointmentsModel;

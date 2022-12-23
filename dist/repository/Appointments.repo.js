@@ -42,6 +42,13 @@ exports.fetchAppointmentById = fetchAppointmentById;
 /* Delete an appointment */
 const deleteAppointmentById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        yield Appointments_model_1.Appointments.update({
+            status: false
+        }, {
+            where: {
+                id: id
+            }
+        });
         const deletedAppointment = yield Appointments_model_1.Appointments.destroy({
             where: {
                 id: id

@@ -39,7 +39,6 @@ export const createUser = async (
         email,
         password
     })
-    console.log("paso")
 
     if (role === "admin") {
         throw Error("Admin users cannot be created")
