@@ -33,12 +33,18 @@ export const fetchAppointmentById = async (id: number) => {
 /* Delete an appointment */
 export const deleteAppointmentById = async (id: number) => {
     try {
+        await Appointments.update({
+            status: false
+        }, {
+            where: {
+                id: id
+            }
+        })
         const deletedAppointment = await Appointments.destroy({
             where: {
                 id: id
             }
-        });
-
+        })
         return deletedAppointment;
     } catch (error) {
         console.log(error);

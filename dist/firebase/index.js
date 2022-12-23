@@ -55,7 +55,6 @@ displayName, email, password, role) => __awaiter(void 0, void 0, void 0, functio
         email,
         password
     });
-    console.log("paso");
     if (role === "admin") {
         throw Error("Admin users cannot be created");
     }
