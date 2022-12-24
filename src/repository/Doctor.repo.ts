@@ -1,3 +1,4 @@
+import { Appointments } from "../models/Appointments.model";
 import { Doctors } from "../models/Doctors.model";
 
 export const createDoctor = async (user_id: string) => {
@@ -19,4 +20,21 @@ export const createDoctor = async (user_id: string) => {
 
     }
 
+}
+
+export const changeDateById = async (appointment_id: number, newDate: Date) => {
+    try {
+        const doctorAppointment = await Appointments.update({
+            date: newDate
+        }, {
+            where: {
+                id: appointment_id
+            }
+        });
+        return doctorAppointment
+    } catch (error) {
+        console.error(error);
+
+        return null
+    }
 }

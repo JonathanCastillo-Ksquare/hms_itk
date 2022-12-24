@@ -1,4 +1,5 @@
 import { Appointments } from "../models/Appointments.model";
+import { Doctors } from "../models/Doctors.model";
 import { Patients } from "../models/Patients.model";
 
 /* Create Appointment */
@@ -67,6 +68,33 @@ export const getAllPatientAppointments = async (uid: number, options: { limit: n
             limit: options.limit,
             where: {
                 patient_id: patient.id,
+                status: true
+            }
+        });
+        return {
+            status: "success",
+            total: count,
+            appointment: rows
+        }
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+/* Get all patient appointments */
+export const getAllDoctorAppointments = async (uid: number, options: { limit: number, offset: number }) => {
+    const doctor = await Doctors.findOne({
+        where: {
+            user_id: uid,
+        },
+    });
+    try {
+        const { count, rows } = await Appointments.findAndCountAll({
+            offset: options.offset,
+            limit: options.limit,
+            where: {
+                doctor_id: doctor.id,
                 status: true
             }
         });

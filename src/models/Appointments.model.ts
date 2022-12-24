@@ -34,7 +34,7 @@ export const initAppointmentsModel = async (sequelize: Sequelize) => {
             sequelize: sequelize,
             // For soft delete
             paranoid: true,
-            deletedAt: 'destroyTime'
+            deletedAt: 'softDelete'
         }
     );
 

@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createDoctor = void 0;
+exports.changeDateById = exports.createDoctor = void 0;
+const Appointments_model_1 = require("../models/Appointments.model");
 const Doctors_model_1 = require("../models/Doctors.model");
 const createDoctor = (user_id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -24,3 +25,20 @@ const createDoctor = (user_id) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.createDoctor = createDoctor;
+const changeDateById = (appointment_id, newDate) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const doctorAppointment = yield Appointments_model_1.Appointments.update({
+            date: newDate
+        }, {
+            where: {
+                id: appointment_id
+            }
+        });
+        return doctorAppointment;
+    }
+    catch (error) {
+        console.error(error);
+        return null;
+    }
+});
+exports.changeDateById = changeDateById;
