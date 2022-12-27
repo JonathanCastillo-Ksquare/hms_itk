@@ -1,7 +1,11 @@
+/* Middleware to check if the entities already exist */
+
 import { Request, Response } from "express";
 import { Patients } from "../models/Patients.model";
 import { getAllUsers } from "../firebase";
+import { Doctors } from "../models/Doctors.model";
 
+// Function to verify if a patient already exists in the patient table
 export const existPatient = async (
     req: Request,
     res: Response,
@@ -26,7 +30,39 @@ export const existPatient = async (
             }
             return next();
         } else {
-            return res.status(400).json({ error: `No patient with that id!` });
+            return res.status(400).json({ error: `No patient found with that id!` });
+        }
+    } catch (error) {
+        return res.status(500).json("Something went wrong");
+    }
+};
+
+// Function to verify if a doctor already exists in the doctor table
+export const existDoctor = async (
+    req: Request,
+    res: Response,
+    next: Function
+) => {
+    try {
+        const users = await getAllUsers();
+        let user = users.find((user) => {
+            return user.uid === res.locals.uid
+        });
+        if (user) {
+            const doctor = await Doctors.findOne({
+                where: {
+                    user_id: user.uid,
+                },
+            });
+            if (doctor) {
+                res.locals = {
+                    ...res.locals,
+                    doctor_id: doctor.id
+                };
+            }
+            return next();
+        } else {
+            return res.status(400).json({ error: `No doctor found with that id!` });
         }
     } catch (error) {
         return res.status(500).json("Something went wrong");

@@ -1,4 +1,5 @@
 "use strict";
+/* Middleware to check if the entities already exist */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -9,9 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.existPatient = void 0;
+exports.existDoctor = exports.existPatient = void 0;
 const Patients_model_1 = require("../models/Patients.model");
 const firebase_1 = require("../firebase");
+const Doctors_model_1 = require("../models/Doctors.model");
+// Function to verify if a patient already exists
 const existPatient = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const users = yield (0, firebase_1.getAllUsers)();
@@ -30,7 +33,7 @@ const existPatient = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             return next();
         }
         else {
-            return res.status(400).json({ error: `No patient with that id!` });
+            return res.status(400).json({ error: `No patient found with that id!` });
         }
     }
     catch (error) {
@@ -38,3 +41,29 @@ const existPatient = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.existPatient = existPatient;
+const existDoctor = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const users = yield (0, firebase_1.getAllUsers)();
+        let user = users.find((user) => {
+            return user.uid === res.locals.uid;
+        });
+        if (user) {
+            const doctor = yield Doctors_model_1.Doctors.findOne({
+                where: {
+                    user_id: user.uid,
+                },
+            });
+            if (doctor) {
+                res.locals = Object.assign(Object.assign({}, res.locals), { doctor_id: doctor.id });
+            }
+            return next();
+        }
+        else {
+            return res.status(400).json({ error: `No doctor found with that id!` });
+        }
+    }
+    catch (error) {
+        return res.status(500).json("Something went wrong");
+    }
+});
+exports.existDoctor = existDoctor;

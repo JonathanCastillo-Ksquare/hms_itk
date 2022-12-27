@@ -126,7 +126,7 @@ const getAllAppointmentsIsDeletedProperty = (options) => __awaiter(void 0, void 
     }
 });
 exports.getAllAppointmentsIsDeletedProperty = getAllAppointmentsIsDeletedProperty;
-/*  Create a filter where you can modify the order of the information do this by the patientId and the doctorId  */
+/*  Create a filter where you can modify the order of the information do this by the patientId  */
 const getAllAppointmentsPatientOrder = (options) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { count, rows } = yield Appointments_model_1.Appointments.findAndCountAll({
@@ -149,7 +149,7 @@ const getAllAppointmentsPatientOrder = (options) => __awaiter(void 0, void 0, vo
     }
 });
 exports.getAllAppointmentsPatientOrder = getAllAppointmentsPatientOrder;
-/*  Create a filter where you can modify the order of the information do this by the patientId and the doctorId  */
+/*  Create a filter where you can modify the order of the information do this by the doctorId  */
 const getAllAppointmentsDoctorOrder = (options) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { count, rows } = yield Appointments_model_1.Appointments.findAndCountAll({

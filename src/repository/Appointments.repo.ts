@@ -1,7 +1,10 @@
+/* Repository to create the functions to manipulate appointments stuff */
+
 import { Appointments } from "../models/Appointments.model";
+import { Doctors } from "../models/Doctors.model";
 import { Patients } from "../models/Patients.model";
 
-/* Create Appointment */
+// Function to create a new appointment
 export const createAppointment = async (doctor_id: number, patient_id: number, date: Date) => {
 
 
@@ -18,7 +21,7 @@ export const createAppointment = async (doctor_id: number, patient_id: number, d
     }
 }
 
-/* Read an appointment */
+// Function to get an appoitnment by passing an appointment ID
 export const fetchAppointmentById = async (id: number) => {
     try {
         const foundAppointment = await Appointments.findByPk(id);
@@ -30,7 +33,7 @@ export const fetchAppointmentById = async (id: number) => {
     }
 }
 
-/* Delete an appointment */
+// Function to delete an appointment by passing an appointment ID
 export const deleteAppointmentById = async (id: number) => {
     try {
         await Appointments.update({
@@ -67,6 +70,33 @@ export const getAllPatientAppointments = async (uid: number, options: { limit: n
             limit: options.limit,
             where: {
                 patient_id: patient.id,
+                status: true
+            }
+        });
+        return {
+            status: "success",
+            total: count,
+            appointment: rows
+        }
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+/* Get all patient appointments */
+export const getAllDoctorAppointments = async (uid: number, options: { limit: number, offset: number }) => {
+    const doctor = await Doctors.findOne({
+        where: {
+            user_id: uid,
+        },
+    });
+    try {
+        const { count, rows } = await Appointments.findAndCountAll({
+            offset: options.offset,
+            limit: options.limit,
+            where: {
+                doctor_id: doctor.id,
                 status: true
             }
         });

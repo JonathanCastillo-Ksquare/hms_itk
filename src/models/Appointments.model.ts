@@ -1,3 +1,4 @@
+/* Model to create the appointments entity and table */
 import { Model, InferAttributes, InferCreationAttributes, CreationOptional, DataTypes, Sequelize, ForeignKey, } from "sequelize";
 import { Doctors } from "./Doctors.model";
 import { Patients } from "./Patients.model";
@@ -11,6 +12,8 @@ export class Appointments extends Model<InferAttributes<Appointments>, InferCrea
 
 }
 
+/* This function will be called in the index file from models folder */
+// Function to init the appointments model
 export const initAppointmentsModel = async (sequelize: Sequelize) => {
     await Appointments.init(
         {
@@ -34,7 +37,7 @@ export const initAppointmentsModel = async (sequelize: Sequelize) => {
             sequelize: sequelize,
             // For soft delete
             paranoid: true,
-            deletedAt: 'destroyTime'
+            deletedAt: 'softDelete'
         }
     );
 

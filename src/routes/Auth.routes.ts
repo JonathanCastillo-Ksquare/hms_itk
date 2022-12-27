@@ -1,3 +1,8 @@
+/*                                      Auth Module - Requirements
+    3. Create a login endpoint where you need to compare the password via Hashing (you can skip all of this if you wish by using Firebase) and return a session token using JWT   */
+// DONE BY USING FIREBASE
+
+
 import { Router, Request, Response } from "express";
 import { createUser, getAllUsers, disableUser } from "../firebase";
 import { isAuthenticated } from "../middlewares/isAuthenticated";
@@ -5,13 +10,10 @@ import { createPatient } from "../repository/Patient.repo";
 
 export const AuthRouter = Router();
 
-//Si quiero que todas mis rutas esten protegidas puedo poner el middleware a nivel del router
-//UserRoutees.use(isAuthenticated)
-
+/*                                      Auth Module - Requirements
+    1. Allow a patient to sign up to your system by creating an endpoint without needing to authenticate  */
 AuthRouter.post('/signUp', async (req: Request, res: Response) => {
-    //Info desde el body
-    //Checar si falta info
-    //Checar que el rol sea adecuado
+
     const { displayName, email, password } = req.body;
 
     if (!displayName || !email || !password) {
@@ -41,6 +43,9 @@ AuthRouter.post('/signUp', async (req: Request, res: Response) => {
     }
 })
 
+
+/*                                      Auth Module - Requirements
+    5. A user can call an endpoint to disable its account (this is a soft-delete operation) is_active = true|false   */
 AuthRouter.put('/deleteAccount', isAuthenticated, async (req: Request, res: Response) => {
 
     const { uid } = res.locals;
@@ -58,6 +63,7 @@ AuthRouter.put('/deleteAccount', isAuthenticated, async (req: Request, res: Resp
 
 })
 
+// Route to get all the existen users
 AuthRouter.get('/getAll', async (req: Request, res: Response) => {
 
     try {

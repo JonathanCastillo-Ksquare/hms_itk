@@ -1,9 +1,7 @@
+/* This works as the repo of the auth routes */
 import * as admin from 'firebase-admin';
 
 export type Role = 'patient' | 'doctor' | 'admin';
-
-//Definir una cuenta admin
-// admin@test.com / toor123
 
 interface User {
     uid: string;
@@ -13,9 +11,7 @@ interface User {
     isDisabled: boolean;
 }
 
-// UserRecord es la tabla de usuarios creados
 const mapToUser = (user: admin.auth.UserRecord) => {
-    // De la propiedad customClaims checamos si existe, sino le asignamos un rol vacio, y lo envolvemos en un alias
     const customClaims = (user.customClaims || { role: "" }) as { role?: string };
     const role = customClaims.role ? customClaims.role : "";
     return {
@@ -27,8 +23,8 @@ const mapToUser = (user: admin.auth.UserRecord) => {
     }
 }
 
+// Function to create a user in firebase auth
 export const createUser = async (
-    // Lo que se le pasa a la funcion
     displayName: string,
     email: string,
     password: string,
@@ -43,17 +39,19 @@ export const createUser = async (
     if (role === "admin") {
         throw Error("Admin users cannot be created")
     }
-    // Para asignar a firebase, en la propiedad de customeClaims la parte de los roles
     await admin.auth().setCustomUserClaims(uid, { role });
-
     return uid
 }
 
+
+// Function to get a user in firebase auth by passing a valid ID
 export const readUser = async (uid: string) => {
     const user = await admin.auth().getUser(uid);
     return mapToUser(user);
 }
 
+
+// Function to get all users from firebase
 export const getAllUsers = async () => {
     const listOfUsers = await admin.auth().listUsers(10);
     const users = listOfUsers.users.map(mapToUser);
@@ -61,6 +59,8 @@ export const getAllUsers = async () => {
     return users
 }
 
+
+// Function to create a user in f
 export const updateUser = async (uid: string, displayName: string) => {
     const user = await admin.auth().updateUser(uid, {
         displayName
@@ -69,16 +69,11 @@ export const updateUser = async (uid: string, displayName: string) => {
     return mapToUser(user);
 }
 
+
+// Function to disable a user from firebase by passing a valid ID
 export const disableUser = async (uid: string, disabled: boolean) => {
     const user = await admin.auth().updateUser(uid, {
         disabled
     })
-    return mapToUser(user);
-}
-
-
-
-export const getUserByEmail = async (email: string) => {
-    const user = await admin.auth().getUserByEmail(email);
     return mapToUser(user);
 }

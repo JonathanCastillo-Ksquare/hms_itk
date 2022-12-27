@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllPatientAppointments = exports.deleteAppointmentById = exports.fetchAppointmentById = exports.createAppointment = void 0;
+exports.getAllDoctorAppointments = exports.getAllPatientAppointments = exports.deleteAppointmentById = exports.fetchAppointmentById = exports.createAppointment = void 0;
 const Appointments_model_1 = require("../models/Appointments.model");
+const Doctors_model_1 = require("../models/Doctors.model");
 const Patients_model_1 = require("../models/Patients.model");
 /* Create Appointment */
 const createAppointment = (doctor_id, patient_id, date) => __awaiter(void 0, void 0, void 0, function* () {
@@ -90,3 +91,31 @@ const getAllPatientAppointments = (uid, options) => __awaiter(void 0, void 0, vo
     }
 });
 exports.getAllPatientAppointments = getAllPatientAppointments;
+/* Get all patient appointments */
+const getAllDoctorAppointments = (uid, options) => __awaiter(void 0, void 0, void 0, function* () {
+    const doctor = yield Doctors_model_1.Doctors.findOne({
+        where: {
+            user_id: uid,
+        },
+    });
+    try {
+        const { count, rows } = yield Appointments_model_1.Appointments.findAndCountAll({
+            offset: options.offset,
+            limit: options.limit,
+            where: {
+                doctor_id: doctor.id,
+                status: true
+            }
+        });
+        return {
+            status: "success",
+            total: count,
+            appointment: rows
+        };
+    }
+    catch (error) {
+        console.log(error);
+        return null;
+    }
+});
+exports.getAllDoctorAppointments = getAllDoctorAppointments;

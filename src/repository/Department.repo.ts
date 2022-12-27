@@ -1,4 +1,8 @@
+// Function to create departments, THESE ONLY CAN BE CREATE BY USING CODE, YOU CAN CREATE THEM IN THE MAIN INDEX FILE
+
 import { Departments } from "../models/Departments.model";
+
+// Function to create a new department
 export const createDepartment = async (department: string) => {
     try {
 
@@ -22,6 +26,7 @@ export const createDepartment = async (department: string) => {
 
 }
 
+// Function to delete a department if necessary
 export const deleteDepartment = async (id: number) => {
     try {
 

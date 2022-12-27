@@ -1,3 +1,5 @@
+/* This index is to initialize all the sequelize models */
+
 import { Sequelize } from "sequelize";
 import { initAdminsModel } from "./Admin.model";
 import { initAppointmentsModel } from "./Appointments.model";

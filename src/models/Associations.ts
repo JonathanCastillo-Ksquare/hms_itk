@@ -1,3 +1,5 @@
+/* This file is to make all the associations */
+
 import { Appointments } from "./Appointments.model";
 import { Departments } from "./Departments.model";
 import { Doctors } from "./Doctors.model";

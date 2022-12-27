@@ -1,5 +1,6 @@
 import { Patients } from "../models/Patients.model";
 
+// Function to create a new patient
 export const createPatient = async (user_id: string) => {
 
     try {
