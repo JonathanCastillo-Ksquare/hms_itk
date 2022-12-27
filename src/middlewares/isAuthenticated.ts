@@ -1,29 +1,32 @@
+/*                                      Auth Module - Requirements
+    4. Allow a patient to sign up to your system by creating an endpoint without needing to authenticate  */
+
+/* This middleware will check if a user is authenticate or not */
+
 import { Request, Response } from "express";
 import * as admin from "firebase-admin";
 
+// Function to check if a user is authenticate
 export const isAuthenticated = async (
     req: Request,
     res: Response,
     next: Function
 ) => {
-    // los JWT viajan en un header llamado Authorization, tiene un schema y unos parametros, en especial el Bearer, aqui se pasa el token, el header tiene que tener authorization, sino existe no mandaron el token y no estan autorizados
-    //No authorization header
     const { authorization } = req.headers;
 
+    // Check if the authorization header exists
     if (!authorization) {
-        return res.status(401).send({ error: 'No auth' });
+        return res.status(401).send({ error: 'No authorization header' });
     }
     //No correct scheme(Bearer)
     if (!authorization.startsWith("Bearer")) {
-        return res.status(401).send({ error: 'No auth' });
+        return res.status(401).send({ error: 'Bearer schema expected' });
     }
     //Check if the token is valid
     const splittedtoken = authorization.split("Bearer ");
     if (splittedtoken.length !== 2) {
-        return res.status(401).send({ error: 'No auth' });
+        return res.status(401).send({ error: 'Invalid token' });
     }
-
-    //Verify if firebase detects the token because we did not create this token, firebase made the token
 
     const token = splittedtoken[1];
 
@@ -39,7 +42,7 @@ export const isAuthenticated = async (
         return next();
     } catch (error) {
         console.log(error);
-        return res.status(401).send({ error: 'No authori' })
+        return res.status(401).send({ error: 'No authorized' })
     }
     // si todo esto pasa nuestro usuairo esta correctamente autenticado y tiene derecho a acceder a los recursos
 }

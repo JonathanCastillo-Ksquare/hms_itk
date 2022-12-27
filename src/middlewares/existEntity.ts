@@ -1,8 +1,11 @@
+/* Middleware to check if the entities already exist */
+
 import { Request, Response } from "express";
 import { Patients } from "../models/Patients.model";
 import { getAllUsers } from "../firebase";
 import { Doctors } from "../models/Doctors.model";
 
+// Function to verify if a patient already exists in the patient table
 export const existPatient = async (
     req: Request,
     res: Response,
@@ -34,6 +37,7 @@ export const existPatient = async (
     }
 };
 
+// Function to verify if a doctor already exists in the doctor table
 export const existDoctor = async (
     req: Request,
     res: Response,

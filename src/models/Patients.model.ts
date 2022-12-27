@@ -1,3 +1,5 @@
+/* Model to create the admin patient and table */
+
 import { Model, InferAttributes, InferCreationAttributes, CreationOptional, DataTypes, Sequelize, } from "sequelize";
 
 export class Patients extends Model<InferAttributes<Patients>, InferCreationAttributes<Patients>> {
@@ -6,6 +8,9 @@ export class Patients extends Model<InferAttributes<Patients>, InferCreationAttr
 
 }
 
+
+/* This function will be called in the index file from models folder */
+// Function to init the patient model
 export const initPatientsModel = async (sequelize: Sequelize) => {
     await Patients.init(
         {

@@ -1,3 +1,5 @@
+/*  */
+
 import { Router, Request, Response } from 'express';
 import { createAppointment, fetchAppointmentById, deleteAppointmentById, getAllPatientAppointments } from '../repository/Appointments.repo';
 import { isAuthenticated } from '../middlewares/isAuthenticated';
@@ -6,9 +8,15 @@ import { existPatient } from '../middlewares/existEntity';
 
 export const PatientRouter = Router();
 
-PatientRouter.use(isAuthenticated, isAuthorized({ roles: ['patient'], allowSameUser: true }), existPatient,)
+/*                                      Patient Module - Requirements
+                    4. Only a user with the role of patient can access these endpoints.    */
+// Apply the middlewares to the whole router
+PatientRouter.use(isAuthenticated, isAuthorized({ roles: ['patient'], allowSameUser: true }), existPatient)
 
-/* Route to create a new appointment */
+/*                                      Patient Module - Requirements
+    1. Create a series of endpoints that need to LIST, Read, Create and Delete appointments   */
+
+/* Create */
 PatientRouter.post('/appointments', async (req: Request, res: Response) => {
     const { doctor_id, date } = req.body;
     const { patient_id } = res.locals;
@@ -43,7 +51,7 @@ PatientRouter.post('/appointments', async (req: Request, res: Response) => {
     })
 })
 
-/* Route to get an appointment */
+/* Read */
 PatientRouter.get('/appointments/:appointmentId', async (req: Request, res: Response) => {
     const appointmentId = Number(req.params['appointmentId']);
 
@@ -74,11 +82,12 @@ PatientRouter.get('/appointments/:appointmentId', async (req: Request, res: Resp
 })
 
 
-/* Route to get all appointmenta of the patient */
+/* List */
 PatientRouter.get('/appointments', async (req: Request, res: Response) => {
     const { uid } = res.locals;
 
-    // Pagination
+    /*                                      Patient Module - Requirements
+                                        2. Create pagination for this resource   */
     const { page = 0, size = 5 } = req.query;
 
     let options = {
@@ -99,7 +108,9 @@ PatientRouter.get('/appointments', async (req: Request, res: Response) => {
 })
 
 
-/* Route to delete an appointment */
+/* Delete */
+/*                                      Patient Module - Requirements
+                3. Soft delete was done by using the paranoid options as true in the appointments model   */
 PatientRouter.put('/appointments/:appointmentId', async (req: Request, res: Response) => {
     const appointmentId = Number(req.params['appointmentId']);
 

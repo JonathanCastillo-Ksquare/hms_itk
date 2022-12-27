@@ -1,12 +1,8 @@
-//Uno es de autenticacion, tienes el token que te identifica como usuario registrado
+/* This middleware will check the permissions of each role */
 
-//Hay diferentes permisos porque hay diferentes roles
 import { Request, Response } from "express";
 import { Role } from "../firebase";
 
-//Sirva como middleware
-//Nos deje configurar  que roles tienen acceso a un endpoint
-//Nos debe de dejar sobreeescribir el permiso si el mismo usuario dueño del recurso quiere accederlo a pesar de no tener permisos
 
 //USAMOS UN CLOUSURE
 export const isAuthorized = (options: { roles: Role[]; allowSameUser: Boolean }) => {

@@ -32,11 +32,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserByEmail = exports.disableUser = exports.updateUser = exports.getAllUsers = exports.readUser = exports.createUser = void 0;
+exports.disableUser = exports.updateUser = exports.getAllUsers = exports.readUser = exports.createUser = void 0;
+/* This works as the repo of the auth routes */
 const admin = __importStar(require("firebase-admin"));
-// UserRecord es la tabla de usuarios creados
 const mapToUser = (user) => {
-    // De la propiedad customClaims checamos si existe, sino le asignamos un rol vacio, y lo envolvemos en un alias
     const customClaims = (user.customClaims || { role: "" });
     const role = customClaims.role ? customClaims.role : "";
     return {
@@ -47,9 +46,8 @@ const mapToUser = (user) => {
         isDisabled: user.disabled
     };
 };
-const createUser = (
-// Lo que se le pasa a la funcion
-displayName, email, password, role) => __awaiter(void 0, void 0, void 0, function* () {
+// Function to create a user in firebase auth
+const createUser = (displayName, email, password, role) => __awaiter(void 0, void 0, void 0, function* () {
     const { uid } = yield admin.auth().createUser({
         displayName,
         email,
@@ -58,22 +56,24 @@ displayName, email, password, role) => __awaiter(void 0, void 0, void 0, functio
     if (role === "admin") {
         throw Error("Admin users cannot be created");
     }
-    // Para asignar a firebase, en la propiedad de customeClaims la parte de los roles
     yield admin.auth().setCustomUserClaims(uid, { role });
     return uid;
 });
 exports.createUser = createUser;
+// Function to get a user in firebase auth by passing a valid ID
 const readUser = (uid) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield admin.auth().getUser(uid);
     return mapToUser(user);
 });
 exports.readUser = readUser;
+// Function to get all users from firebase
 const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     const listOfUsers = yield admin.auth().listUsers(10);
     const users = listOfUsers.users.map(mapToUser);
     return users;
 });
 exports.getAllUsers = getAllUsers;
+// Function to create a user in f
 const updateUser = (uid, displayName) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield admin.auth().updateUser(uid, {
         displayName
@@ -81,6 +81,7 @@ const updateUser = (uid, displayName) => __awaiter(void 0, void 0, void 0, funct
     return mapToUser(user);
 });
 exports.updateUser = updateUser;
+// Function to disable a user from firebase by passing a valid ID
 const disableUser = (uid, disabled) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield admin.auth().updateUser(uid, {
         disabled
@@ -88,8 +89,3 @@ const disableUser = (uid, disabled) => __awaiter(void 0, void 0, void 0, functio
     return mapToUser(user);
 });
 exports.disableUser = disableUser;
-const getUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield admin.auth().getUserByEmail(email);
-    return mapToUser(user);
-});
-exports.getUserByEmail = getUserByEmail;

@@ -1,3 +1,5 @@
+/* Model to create the department entity and table */
+
 import { InferAttributes, InferCreationAttributes, Model, DataTypes, CreationOptional, Sequelize, } from "sequelize";
 
 export class Departments extends Model<InferAttributes<Departments>, InferCreationAttributes<Departments>> {
@@ -5,6 +7,8 @@ export class Departments extends Model<InferAttributes<Departments>, InferCreati
     declare department: string;
 }
 
+/* This function will be called in the index file from models folder */
+// Function to init the department model
 export const initDepartmentModel = async (sequelize: Sequelize) => {
     await Departments.init(
         {

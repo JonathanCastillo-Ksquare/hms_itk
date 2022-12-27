@@ -15,8 +15,6 @@ const firebase_1 = require("../firebase");
 const isAuthenticated_1 = require("../middlewares/isAuthenticated");
 const Patient_repo_1 = require("../repository/Patient.repo");
 exports.AuthRouter = (0, express_1.Router)();
-//Si quiero que todas mis rutas esten protegidas puedo poner el middleware a nivel del router
-//UserRoutees.use(isAuthenticated)
 exports.AuthRouter.post('/signUp', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Info desde el body
     //Checar si falta info

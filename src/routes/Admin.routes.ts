@@ -1,3 +1,5 @@
+/* Admin Module - Requirements */
+
 import { Router, Request, Response } from "express";
 import { getAllUsers, createUser } from "../firebase";
 import { isAuthenticated } from "../middlewares/isAuthenticated";
@@ -8,8 +10,11 @@ import { getAllAppointmentsPatientById, getAllAppointmentsDoctorById, getAllAppo
 
 export const AdminRouter = Router();
 
+// Apply the middlewares to the whole router
 AdminRouter.use(isAuthenticated, isAuthorized({ roles: ['admin'], allowSameUser: true }));
 
+/*                                      Admin Module - Requirements
+            1. Create an endpoint where an admin can create a new doctor account (user).    */
 AdminRouter.post('/createDoctor', async (req: Request, res: Response) => {
     const { displayName, email, password } = req.body;
 
@@ -40,6 +45,8 @@ AdminRouter.post('/createDoctor', async (req: Request, res: Response) => {
 
 })
 
+/*                                      Admin Module - Requirements
+     2. Create an endpoint that can modify the is_active property from the User model back to true.     */
 AdminRouter.put('/changeStateAccount/:uid', isAuthenticated, isAuthorized({ roles: ['admin'], allowSameUser: true }), async (req: Request, res: Response) => {
     const { uid } = req.params;
 
@@ -55,10 +62,14 @@ AdminRouter.put('/changeStateAccount/:uid', isAuthenticated, isAuthorized({ role
     }
 })
 
-/* Route to get all appointmenta of the patient */
+/*                                      Admin Module - Requirements
+     3. Create an endpoint that would LIST all the appointments in the table      */
 AdminRouter.get('/allAppointments', async (req: Request, res: Response) => {
-    // Pagination
+    /*                                      Admin Module - Requirements
+     4. [Appointments] Create pagination filters for the previous endpoint       */
     const { page = 0, size = 5 } = req.query;
+    /*                                      Admin Module - Requirements
+     5. [Appointments] Create a filter where you can pass a patientId and only see the appointments of that user        */
     if (req.query.patientId) {
         let options = {
             limit: Number(size),
@@ -67,7 +78,10 @@ AdminRouter.get('/allAppointments', async (req: Request, res: Response) => {
         }
         const appointments = await getAllAppointmentsPatientById(options);
         return res.status(200).send(appointments);
-    } else if (req.query.doctorId) {
+    }
+    /*                                      Admin Module - Requirements
+     6. [Appointments] Create a filter where you can pass a doctorId and only see the appointments where the doctor is in charge         */
+    else if (req.query.doctorId) {
         let options = {
             limit: Number(size),
             offset: Number(page) * Number(size),
@@ -75,7 +89,10 @@ AdminRouter.get('/allAppointments', async (req: Request, res: Response) => {
         }
         const appointments = await getAllAppointmentsDoctorById(options);
         return res.status(200).send(appointments);
-    } else if (req.query.appointmentActives) {
+    }
+    /*                                      Admin Module - Requirements
+     7. [Appointments] Create a filter where you can receive the information based on is_deleted property          */
+    else if (req.query.appointmentActives) {
         let options = {
             limit: Number(size),
             offset: Number(page) * Number(size),
@@ -87,7 +104,10 @@ AdminRouter.get('/allAppointments', async (req: Request, res: Response) => {
         } else {
             return res.status(500).send("No valid query");
         }
-    } else if (req.query.orderBy && typeof req.query.orderBy === "string") {
+    }
+    /*                                      Admin Module - Requirements
+     8. [Appointments] Create a filter where you can modify the order of the information do this by the patientId and the doctorId          */
+    else if (req.query.orderBy && typeof req.query.orderBy === "string") {
         const query = req.query.orderBy
         const splittedQuery = query.split("-");
         const entity = splittedQuery[0];
@@ -109,6 +129,7 @@ AdminRouter.get('/allAppointments', async (req: Request, res: Response) => {
         }
 
     }
+    // Get all appointments
     else {
         let options = {
             limit: Number(size),

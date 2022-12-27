@@ -1,8 +1,11 @@
+/* Repository to create the functions to manipulate admin stuff */
+
 import { createUser, getAllUsers } from "../firebase";
 import { Admins } from "../models/Admin.model";
 import { Appointments } from "../models/Appointments.model";
 import { Op } from "sequelize";
 
+// Function to create an admin by passing the minimun parameters needed to be created
 export const createAdmin = async (displayName: string, email: string, pswrd: string) => {
     try {
 
@@ -30,7 +33,7 @@ export const createAdmin = async (displayName: string, email: string, pswrd: str
 
 }
 
-/* Get all patient appointments */
+// Function to get all appointments of all patients
 export const getAllAppointments = async (options: { limit: number, offset: number }) => {
     try {
         const { count, rows } = await Appointments.findAndCountAll({
@@ -54,7 +57,7 @@ export const getAllAppointments = async (options: { limit: number, offset: numbe
     }
 }
 
-/* Create a filter where you can pass a patientId and only see the appointments of that user  */
+// Function to get all the appointments of a given id
 export const getAllAppointmentsPatientById = async (options: { limit: number, offset: number, param: number }) => {
     try {
         const { count, rows } = await Appointments.findAndCountAll({
@@ -75,7 +78,7 @@ export const getAllAppointmentsPatientById = async (options: { limit: number, of
     }
 }
 
-/* Create a filter where you can pass a doctorId and only see the appointments where the doctor is in charge  */
+// Function to get all appointments of a given doctor
 export const getAllAppointmentsDoctorById = async (options: { limit: number, offset: number, param: number }) => {
     try {
         const { count, rows } = await Appointments.findAndCountAll({
@@ -96,8 +99,8 @@ export const getAllAppointmentsDoctorById = async (options: { limit: number, off
     }
 }
 
-/* Create a filter where you can receive the information based on is_deleted property */
 
+// Function to get all apppintments according to the "isDeleted" property
 export const getAllAppointmentsIsDeletedProperty = async (options: { limit: number, offset: number, param: string }) => {
 
     try {
@@ -119,7 +122,7 @@ export const getAllAppointmentsIsDeletedProperty = async (options: { limit: numb
     }
 }
 
-/*  Create a filter where you can modify the order of the information do this by the patientId and the doctorId  */
+// Function to get all appointments of a given patient ID and order them ASC | DESC
 export const getAllAppointmentsPatientOrder = async (options: { limit: number, offset: number, order: string, id: number }) => {
 
     try {
@@ -142,7 +145,7 @@ export const getAllAppointmentsPatientOrder = async (options: { limit: number, o
     }
 }
 
-/*  Create a filter where you can modify the order of the information do this by the patientId and the doctorId  */
+// Function to get all appointments of a given doctor ID and order them ASC | DESC
 export const getAllAppointmentsDoctorOrder = async (options: { limit: number, offset: number, order: string, id: number }) => {
 
     try {

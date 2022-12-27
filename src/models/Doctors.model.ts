@@ -1,3 +1,5 @@
+/* Model to create the doctor entity and table */
+
 import { Model, InferAttributes, InferCreationAttributes, DataTypes, CreationOptional, Sequelize, ForeignKey } from "sequelize";
 import { Departments } from "./Departments.model";
 
@@ -8,6 +10,8 @@ export class Doctors extends Model<InferAttributes<Doctors>, InferCreationAttrib
     declare isAvailable: CreationOptional<boolean>;
 }
 
+/* This function will be called in the index file from models folder */
+// Function to init the doctor model
 export const initDoctorsModel = async (sequelize: Sequelize) => {
     await Doctors.init(
         {
