@@ -1,22 +1,41 @@
-/* This file is to make all the associations */
-
-import { Appointments } from "./Appointments.model";
-import { Departments } from "./Departments.model";
-import { Doctors } from "./Doctors.model";
-import { Patients } from "./Patients.model";
-
-const setupAssociations = () => {
-
-    Patients.hasMany(Appointments, { foreignKey: "patient_id" });
-    Appointments.belongsTo(Patients, { foreignKey: "patient_id", });
-
-    Doctors.hasMany(Appointments, { foreignKey: "doctor_id" });
-    Appointments.belongsTo(Doctors, { foreignKey: "doctor_id" });
-
-    Departments.hasMany(Doctors, { foreignKey: "department_id" });
-    Doctors.hasMany(Departments, { foreignKey: "department_id" });
+import { Appointment } from "./appointments.model"
+import { Doctor } from "./doctor.model"
+import { Patient } from "./patient.model"
+import { Department } from "./departments.model"
 
 
-}
+/* Appointments -- Doctors */
 
-export default setupAssociations;
+Doctor.hasMany(Appointment, {
+    foreignKey: 'doctor_id',
+    sourceKey: 'doctor_id'
+});
+
+Appointment.belongsTo(Doctor, {
+    foreignKey: 'doctor_id',
+    targetKey: 'doctor_id'
+});
+
+/* Appointments -- Patients */
+
+Patient.hasMany(Appointment, {
+    foreignKey: 'patient_id',
+    sourceKey: 'patient_id'
+});
+
+Appointment.belongsTo(Patient, {
+    foreignKey: 'patient_id',
+    targetKey: 'patient_id'
+});
+
+/* Departments -- Doctors */
+
+Department.hasMany(Doctor, {
+    foreignKey: 'department_id',
+    sourceKey: 'department_id'
+});
+
+Doctor.belongsTo(Department, {
+    foreignKey: 'department_id',
+    targetKey: 'department_id'
+})
