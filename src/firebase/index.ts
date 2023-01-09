@@ -10,9 +10,12 @@ interface User {
     role: Role;
     isDisabled: boolean;
 }
+interface TemporalRole {
+    role?: string
+}
 
 const mapToUser = (user: admin.auth.UserRecord) => {
-    const customClaims = (user.customClaims || { role: "" }) as { role?: string };
+    const customClaims = (user.customClaims || { role: "" }) as TemporalRole;
     const role = customClaims.role ? customClaims.role : "";
     return {
         uid: user.uid,
@@ -36,9 +39,6 @@ export const createUser = async (
         password
     })
 
-    if (role === "admin") {
-        throw Error("Admin users cannot be created")
-    }
     await admin.auth().setCustomUserClaims(uid, { role });
     return uid
 }

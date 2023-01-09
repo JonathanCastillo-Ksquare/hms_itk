@@ -1,10 +1,7 @@
 "use strict";
-//Uno es de autenticacion, tienes el token que te identifica como usuario registrado
+/* This middleware will check the permissions of each role */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isAuthorized = void 0;
-//Sirva como middleware
-//Nos deje configurar  que roles tienen acceso a un endpoint
-//Nos debe de dejar sobreeescribir el permiso si el mismo usuario dueño del recurso quiere accederlo a pesar de no tener permisos
 //USAMOS UN CLOUSURE
 const isAuthorized = (options) => {
     return (req, res, next) => {

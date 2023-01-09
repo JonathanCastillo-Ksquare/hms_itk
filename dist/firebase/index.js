@@ -53,9 +53,6 @@ const createUser = (displayName, email, password, role) => __awaiter(void 0, voi
         email,
         password
     });
-    if (role === "admin") {
-        throw Error("Admin users cannot be created");
-    }
     yield admin.auth().setCustomUserClaims(uid, { role });
     return uid;
 });

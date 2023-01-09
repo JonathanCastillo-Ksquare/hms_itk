@@ -1,4 +1,6 @@
 "use strict";
+/*                                      Auth Module - Requirements
+    4. Allow a patient to sign up to your system by creating an endpoint without needing to authenticate  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -34,23 +36,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isAuthenticated = void 0;
 const admin = __importStar(require("firebase-admin"));
+// Function to check if a user is authenticate
 const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    // los JWT viajan en un header llamado Authorization, tiene un schema y unos parametros, en especial el Bearer, aqui se pasa el token, el header tiene que tener authorization, sino existe no mandaron el token y no estan autorizados
-    //No authorization header
     const { authorization } = req.headers;
+    // Check if the authorization header exists
     if (!authorization) {
-        return res.status(401).send({ error: 'No auth' });
+        return res.status(401).send({ error: 'No authorization header' });
     }
     //No correct scheme(Bearer)
     if (!authorization.startsWith("Bearer")) {
-        return res.status(401).send({ error: 'No auth' });
+        return res.status(401).send({ error: 'Bearer schema expected' });
     }
     //Check if the token is valid
     const splittedtoken = authorization.split("Bearer ");
     if (splittedtoken.length !== 2) {
-        return res.status(401).send({ error: 'No auth' });
+        return res.status(401).send({ error: 'Invalid token' });
     }
-    //Verify if firebase detects the token because we did not create this token, firebase made the token
     const token = splittedtoken[1];
     try {
         const decodedToken = yield admin.auth().verifyIdToken(token);
@@ -59,7 +60,7 @@ const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     }
     catch (error) {
         console.log(error);
-        return res.status(401).send({ error: 'No authori' });
+        return res.status(401).send({ error: 'No authorized' });
     }
     // si todo esto pasa nuestro usuairo esta correctamente autenticado y tiene derecho a acceder a los recursos
 });
