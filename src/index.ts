@@ -5,7 +5,7 @@ import './models/associations';
 import * as admin from "firebase-admin";
 admin.initializeApp();
 
-import { createAdmin } from './middlewares/updateTables';
+import { createAdmin, updateTables } from './middlewares/updateTables';
 
 
 const PORT = process.env.PORT;

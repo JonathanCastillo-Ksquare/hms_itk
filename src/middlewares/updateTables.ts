@@ -8,14 +8,14 @@ import { Request, Response } from "express";
 export const updateTables = async (req: Request, res: Response, next: Function) => {
     try {
         const fireUsers = await getAllUsers();
-        const patienUsers = await Patient.findAll();
-        const parsedPatienUsers = patienUsers.map(patientUser => patientUser.toJSON());
+        const patientUsers = await Patient.findAll();
+        const parsedPatientUsers = patientUsers.map(patientUser => patientUser.toJSON());
         const doctorUsers = await Doctor.findAll();
         const parsedDoctorUsers = doctorUsers.map(doctorUsers => doctorUsers.toJSON());
         const adminUsers = await Admin.findAll();
         const parsedAdminUsers = adminUsers.map(adminUsers => adminUsers.toJSON());
 
-        const patientNotInFire = parsedPatienUsers.filter(patient => !fireUsers.find(firePatient => firePatient.uid === patient.user_id));
+        const patientNotInFire = parsedPatientUsers.filter(patient => !fireUsers.find(firePatient => firePatient.uid === patient.user_id));
         const doctorNotInFire = parsedDoctorUsers.filter(doctor => !fireUsers.find(fireDoctor => fireDoctor.uid === doctor.user_id));
         const adminNotInFire = parsedAdminUsers.filter(admin => !fireUsers.find(fireAdmin => fireAdmin.uid === admin.user_id));
 
@@ -45,6 +45,29 @@ export const updateTables = async (req: Request, res: Response, next: Function) 
             })
         }
 
+        const patientNotInDB = fireUsers.filter(firePatient => !parsedPatientUsers.find(patient => firePatient.uid === patient.user_id));
+        const doctorNotInDB = fireUsers.filter(fireDoctor => !parsedDoctorUsers.find(doctor => fireDoctor.uid === doctor.user_id));
+        const adminNotInDB = fireUsers.filter(fireAdmin => !parsedAdminUsers.find(admin => fireAdmin.uid === admin.user_id));
+
+        if (patientNotInDB) {
+            patientNotInDB.forEach(async user => {
+                if (user.role === "patient") {
+                    await Patient.create({ user_id: user.uid });
+                }
+            })
+        } else if (doctorNotInDB) {
+            doctorNotInDB.forEach(async user => {
+                if (user.role === "doctor") {
+                    await Patient.create({ user_id: user.uid });
+                }
+            })
+        } else if (adminNotInDB) {
+            adminNotInDB.forEach(async user => {
+                if (user.role === "admin") {
+                    await Patient.create({ user_id: user.uid });
+                }
+            })
+        }
 
         console.log("All tables are sync")
         return next();

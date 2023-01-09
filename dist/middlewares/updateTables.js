@@ -17,13 +17,13 @@ const firebase_1 = require("../firebase");
 const updateTables = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const fireUsers = yield (0, firebase_1.getAllUsers)();
-        const patienUsers = yield patient_model_1.Patient.findAll();
-        const parsedPatienUsers = patienUsers.map(patientUser => patientUser.toJSON());
+        const patientUsers = yield patient_model_1.Patient.findAll();
+        const parsedPatientUsers = patientUsers.map(patientUser => patientUser.toJSON());
         const doctorUsers = yield doctor_model_1.Doctor.findAll();
         const parsedDoctorUsers = doctorUsers.map(doctorUsers => doctorUsers.toJSON());
         const adminUsers = yield admin_model_1.Admin.findAll();
         const parsedAdminUsers = adminUsers.map(adminUsers => adminUsers.toJSON());
-        const patientNotInFire = parsedPatienUsers.filter(patient => !fireUsers.find(firePatient => firePatient.uid === patient.user_id));
+        const patientNotInFire = parsedPatientUsers.filter(patient => !fireUsers.find(firePatient => firePatient.uid === patient.user_id));
         const doctorNotInFire = parsedDoctorUsers.filter(doctor => !fireUsers.find(fireDoctor => fireDoctor.uid === doctor.user_id));
         const adminNotInFire = parsedAdminUsers.filter(admin => !fireUsers.find(fireAdmin => fireAdmin.uid === admin.user_id));
         if (patientNotInFire) {
@@ -51,6 +51,30 @@ const updateTables = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
                         user_id: admin.user_id
                     }
                 });
+            }));
+        }
+        const patientNotInDB = fireUsers.filter(firePatient => !parsedPatientUsers.find(patient => firePatient.uid === patient.user_id));
+        const doctorNotInDB = fireUsers.filter(fireDoctor => !parsedDoctorUsers.find(doctor => fireDoctor.uid === doctor.user_id));
+        const adminNotInDB = fireUsers.filter(fireAdmin => !parsedAdminUsers.find(admin => fireAdmin.uid === admin.user_id));
+        if (patientNotInDB) {
+            patientNotInDB.forEach((user) => __awaiter(void 0, void 0, void 0, function* () {
+                if (user.role === "patient") {
+                    yield patient_model_1.Patient.create({ user_id: user.uid });
+                }
+            }));
+        }
+        else if (doctorNotInDB) {
+            doctorNotInDB.forEach((user) => __awaiter(void 0, void 0, void 0, function* () {
+                if (user.role === "doctor") {
+                    yield patient_model_1.Patient.create({ user_id: user.uid });
+                }
+            }));
+        }
+        else if (adminNotInDB) {
+            adminNotInDB.forEach((user) => __awaiter(void 0, void 0, void 0, function* () {
+                if (user.role === "admin") {
+                    yield patient_model_1.Patient.create({ user_id: user.uid });
+                }
             }));
         }
         console.log("All tables are sync");
