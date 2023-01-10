@@ -62,11 +62,10 @@ const patientController = {
     }),
     getAllPatientAppointments: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const { uid } = res.locals;
-        const { page = 0, size = 5 } = req.query;
-        console.log("DESDE PAGINATION");
+        const { offset = 0, limit = 5 } = req.query;
         let options = {
-            limit: Number(size),
-            offset: Number(page) * Number(size)
+            limit: Number(limit),
+            offset: Number(offset) * Number(limit)
         };
         try {
             const { count, rows } = yield appointments_model_1.Appointment.findAndCountAll({
@@ -101,12 +100,14 @@ const patientController = {
                 status: false
             }, {
                 where: {
-                    appointment_id: appointmentId
+                    appointment_id: appointmentId,
+                    patient_id: res.locals.patient_id
                 }
             });
             yield appointments_model_1.Appointment.destroy({
                 where: {
-                    appointment_id: appointmentId
+                    appointment_id: appointmentId,
+                    patient_id: res.locals.patient_id
                 }
             });
             return res.status(200).json({ success: "Appointment deleted successfully!" });

@@ -6,12 +6,12 @@ import { Patient } from "../models/patient.model";
 const doctorcontroller = {
     getAllDoctorAppointments: async (req: Request, res: Response) => {
         const { uid } = res.locals;
-        const { page = 0, size = 5, orderBy, dateFilter, patientFilter } = req.query;
+        const { offset = 0, limit = 5, orderBy, dateFilter, patientFilter } = req.query;
 
         if (dateFilter) {
             let options = {
-                limit: Number(size),
-                offset: Number(page) * Number(size),
+                limit: Number(limit),
+                offset: Number(offset) * Number(limit),
                 filter: String(dateFilter)
             }
 
@@ -21,7 +21,8 @@ const doctorcontroller = {
                     offset: options.offset,
                     limit: options.limit,
                     where: {
-                        date: options.filter
+                        date: options.filter,
+                        doctor_id: res.locals.doctor_id
                     }
                 });
                 return res.status(200).json({
@@ -36,8 +37,8 @@ const doctorcontroller = {
         }
         else if (patientFilter) {
             let options = {
-                limit: Number(size),
-                offset: Number(page) * Number(size),
+                limit: Number(limit),
+                offset: Number(offset) * Number(limit),
                 filter: Number(patientFilter)
             }
 
@@ -49,6 +50,9 @@ const doctorcontroller = {
                         where: {
                             patient_id: options.filter
                         }
+                    },
+                    where: {
+                        doctor_id: res.locals.doctor_id
                     },
                     attributes: ["appointment_id", "date", "status", "patient_id"],
                     offset: options.offset,
@@ -67,11 +71,10 @@ const doctorcontroller = {
         else if (orderBy) {
 
             let options = {
-                limit: Number(size),
-                offset: Number(page) * Number(size),
+                limit: Number(limit),
+                offset: Number(offset) * Number(limit),
                 order: String(orderBy),
             }
-
             try {
                 const { count, rows } = await Appointment.findAndCountAll({
                     include: {
@@ -101,8 +104,8 @@ const doctorcontroller = {
         // Get all appointments of the doctor
         else {
             let options = {
-                limit: Number(size),
-                offset: Number(page) * Number(size)
+                limit: Number(limit),
+                offset: Number(offset) * Number(limit)
             }
 
             try {
@@ -141,7 +144,8 @@ const doctorcontroller = {
                 date: newDate
             }, {
                 where: {
-                    appointment_id: appointmentId
+                    appointment_id: appointmentId,
+                    doctor_id: res.locals.doctor_id
                 }
             });
             return res.status(200).json({ success: "Date changed succesfully!" })

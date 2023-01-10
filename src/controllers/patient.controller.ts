@@ -59,12 +59,11 @@ const patientController = {
     },
     getAllPatientAppointments: async (req: Request, res: Response) => {
         const { uid } = res.locals;
-        const { page = 0, size = 5 } = req.query;
+        const { offset = 0, limit = 5 } = req.query;
 
-        console.log("DESDE PAGINATION")
         let options = {
-            limit: Number(size),
-            offset: Number(page) * Number(size)
+            limit: Number(limit),
+            offset: Number(offset) * Number(limit)
         }
         try {
             const { count, rows } = await Appointment.findAndCountAll({
@@ -99,12 +98,14 @@ const patientController = {
                 status: false
             }, {
                 where: {
-                    appointment_id: appointmentId
+                    appointment_id: appointmentId,
+                    patient_id: res.locals.patient_id
                 }
             })
             await Appointment.destroy({
                 where: {
-                    appointment_id: appointmentId
+                    appointment_id: appointmentId,
+                    patient_id: res.locals.patient_id
                 }
             })
             return res.status(200).json({ success: "Appointment deleted successfully!" });
