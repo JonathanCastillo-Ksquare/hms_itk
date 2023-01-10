@@ -61,6 +61,7 @@ const patientController = {
         const { uid } = res.locals;
         const { page = 0, size = 5 } = req.query;
 
+        console.log("DESDE PAGINATION")
         let options = {
             limit: Number(size),
             offset: Number(page) * Number(size)

@@ -46,10 +46,13 @@ const PORT = process.env.PORT;
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         yield (0, connection_1.init)();
-        app_1.default.listen(PORT, () => {
+        app_1.default.listen(PORT, () => __awaiter(this, void 0, void 0, function* () {
             console.log('Server running on port:', PORT);
             (0, updateTables_1.createAdmin)("admin", "admin@admin.com", "123456789");
-        });
+            (0, updateTables_1.createDepartments)("Cardiology");
+            (0, updateTables_1.createDepartments)("Neurology");
+            (0, updateTables_1.createDepartments)("Ginecology");
+        }));
     });
 }
 main();

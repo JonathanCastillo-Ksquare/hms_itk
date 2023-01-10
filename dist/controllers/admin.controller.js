@@ -15,7 +15,7 @@ const doctor_model_1 = require("../models/doctor.model");
 const appointments_model_1 = require("../models/appointments.model");
 const adminController = {
     createDoctor: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { displayName, email, password } = req.body;
+        const { displayName, email, password, departmentId } = req.body;
         if (!displayName || !email || !password) {
             return res.status(400).json({ error: 'Missing fields!' });
         }
@@ -31,11 +31,15 @@ const adminController = {
         else {
             try {
                 const user_id = yield (0, firebase_1.createUser)(displayName, email, password, 'doctor');
-                yield doctor_model_1.Doctor.create({ user_id });
+                yield doctor_model_1.Doctor.create({
+                    user_id: user_id,
+                    department_id: departmentId
+                });
                 return res.status(201).json({ success: `A new doctor with id: ${user_id} was created successfully!` });
             }
             catch (error) {
-                return res.status(500).json({ error: 'Something went wrong!' });
+                console.log(error);
+                return res.status(500).json({ error: 'Something went wrongsdffsd!' });
             }
         }
     }),
