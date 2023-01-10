@@ -9,10 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createAdmin = exports.updateTables = void 0;
+exports.createDepartments = exports.createAdmin = exports.updateTables = void 0;
 const patient_model_1 = require("../models/patient.model");
 const doctor_model_1 = require("../models/doctor.model");
 const admin_model_1 = require("../models/admin.model");
+const departments_model_1 = require("../models/departments.model");
 const firebase_1 = require("../firebase");
 const updateTables = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -26,6 +27,9 @@ const updateTables = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         const patientNotInFire = parsedPatientUsers.filter(patient => !fireUsers.find(firePatient => firePatient.uid === patient.user_id));
         const doctorNotInFire = parsedDoctorUsers.filter(doctor => !fireUsers.find(fireDoctor => fireDoctor.uid === doctor.user_id));
         const adminNotInFire = parsedAdminUsers.filter(admin => !fireUsers.find(fireAdmin => fireAdmin.uid === admin.user_id));
+        const patientNotInDB = fireUsers.filter(firePatient => !parsedPatientUsers.find(patient => firePatient.uid === patient.user_id));
+        const doctorNotInDB = fireUsers.filter(fireDoctor => !parsedDoctorUsers.find(doctor => fireDoctor.uid === doctor.user_id));
+        const adminNotInDB = fireUsers.filter(fireAdmin => !parsedAdminUsers.find(admin => fireAdmin.uid === admin.user_id));
         if (patientNotInFire) {
             patientNotInFire.forEach((patient) => __awaiter(void 0, void 0, void 0, function* () {
                 yield patient_model_1.Patient.destroy({
@@ -53,9 +57,6 @@ const updateTables = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
                 });
             }));
         }
-        const patientNotInDB = fireUsers.filter(firePatient => !parsedPatientUsers.find(patient => firePatient.uid === patient.user_id));
-        const doctorNotInDB = fireUsers.filter(fireDoctor => !parsedDoctorUsers.find(doctor => fireDoctor.uid === doctor.user_id));
-        const adminNotInDB = fireUsers.filter(fireAdmin => !parsedAdminUsers.find(admin => fireAdmin.uid === admin.user_id));
         if (patientNotInDB) {
             patientNotInDB.forEach((user) => __awaiter(void 0, void 0, void 0, function* () {
                 if (user.role === "patient") {
@@ -107,3 +108,17 @@ const createAdmin = (displayName, email, pswrd) => __awaiter(void 0, void 0, voi
     }
 });
 exports.createAdmin = createAdmin;
+const createDepartments = (department) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const foundDepartment = yield departments_model_1.Department.findOne({ where: { department: department } });
+        if (!foundDepartment) {
+            const dep = departments_model_1.Department.create({ department: department });
+            return dep;
+        }
+    }
+    catch (error) {
+        console.error(error);
+        return null;
+    }
+});
+exports.createDepartments = createDepartments;

@@ -4,7 +4,7 @@ import { sequelize } from '../database/connection';
 export class Doctor extends Model<InferCreationAttributes<Doctor>> {
     declare doctor_id: CreationOptional<number>;
     declare user_id: string
-    declare department_id: CreationOptional<number>;
+    declare department_id: number;
     declare is_available: CreationOptional<boolean>;
 }
 
