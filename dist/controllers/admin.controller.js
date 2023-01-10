@@ -46,12 +46,9 @@ const adminController = {
     changeIsDisabled: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const { uid } = req.params;
         const { disabled } = req.body;
-        if (!uid || !disabled) {
-            return res.status(400).json({ error: "Missing fields!" });
-        }
         try {
             yield (0, firebase_1.disableUser)(uid, disabled);
-            return res.status(200).json({ success: "User disabled successfully!" });
+            return res.status(200).json({ success: "User reactivated successfully!" });
         }
         catch (error) {
             console.log(error);
@@ -59,11 +56,11 @@ const adminController = {
         }
     }),
     getAllAppointments: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { page = 0, size = 5, patientId, doctorId, appointmentActives, orderBy } = req.query;
+        const { offset = 0, limit = 5, patientId, doctorId, appointmentActives, orderBy } = req.query;
         if (patientId) {
             let options = {
-                limit: Number(size),
-                offset: Number(page) * Number(size),
+                limit: Number(limit),
+                offset: Number(offset) * Number(limit),
                 patient_id: Number(patientId)
             };
             try {
@@ -87,8 +84,8 @@ const adminController = {
         }
         else if (doctorId) {
             let options = {
-                limit: Number(size),
-                offset: Number(page) * Number(size),
+                limit: Number(limit),
+                offset: Number(offset) * Number(limit),
                 doctor_id: Number(doctorId)
             };
             try {
@@ -112,8 +109,8 @@ const adminController = {
         }
         else if (appointmentActives) {
             let options = {
-                limit: Number(size),
-                offset: Number(page) * Number(size),
+                limit: Number(limit),
+                offset: Number(offset) * Number(limit),
                 status: String(appointmentActives)
             };
             if (options.status === "true" || options.status === "false") {
@@ -147,8 +144,8 @@ const adminController = {
             const entity_id = splittedQuery[1];
             const order = splittedQuery[2];
             let options = {
-                limit: Number(size),
-                offset: Number(page) * Number(size),
+                limit: Number(limit),
+                offset: Number(offset) * Number(limit),
                 order: String(order),
                 id: Number(entity_id)
             };
@@ -198,8 +195,8 @@ const adminController = {
         // Get all appointments
         else {
             let options = {
-                limit: Number(size),
-                offset: Number(page) * Number(size)
+                limit: Number(limit),
+                offset: Number(offset) * Number(limit)
             };
             try {
                 const { count, rows } = yield appointments_model_1.Appointment.findAndCountAll({

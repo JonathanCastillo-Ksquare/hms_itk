@@ -1,0 +1,1120 @@
+{
+	"info": {
+		"_postman_id": "8c5b8274-6027-4725-b2de-43d37e63300d",
+		"name": "HMS-JonathanCastillo",
+		"description": "These endpoints will cover the healt management system (hms) to simulate a real backend of a real hospital app where are different roles:\n\n- Patient: Which can create, read, list and delete appointments\n- Doctor: Which can read list and manage the dates of the appointments\n- Admin: Which can create new doctors, reactivate the user accounts, and list all appointments.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24515294"
+	},
+	"item": [
+		{
+			"name": "User routes",
+			"item": [
+				{
+					"name": "SignUp a new user(patient))",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"displayName\":\"patient\",\r\n    \"email\":\"patient@patient.com\",\r\n    \"password\":\"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/user/signup",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"signup"
+							]
+						},
+						"description": "This route allows a user to sign up as a patient, a user has to provide the following information:\n\n- Displayname\n- Email\n- Password"
+					},
+					"response": []
+				},
+				{
+					"name": "Generate Token for users",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"patient@patient.com\",\r\n    \"password\":\"123456789\",\r\n    \"returnSecureToken\":true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyCZpC9dgIcL3LEwi77H-sEuP1zQndiPoG8",
+							"protocol": "https",
+							"host": [
+								"www",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"identitytoolkit",
+								"v3",
+								"relyingparty",
+								"verifyPassword"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "AIzaSyCZpC9dgIcL3LEwi77H-sEuP1zQndiPoG8"
+								}
+							]
+						},
+						"description": "This route allows a user to simulate a login interface. It uses a personal firebase key to get the information. In the body, the user must provide:\n\n- Email\n- Password\n- returnSecureToken as true\n    \n\nIt will return a token like the following:\n\n``` json\n{\n    \"idToken\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudDMiLCJyb2xlIjoicGF0aWVudCIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9obXMtam9uYXRoYW5jYXN0aWxsbyIsImF1ZCI6Imhtcy1qb25hdGhhbmNhc3RpbGxvIiwiYXV0aF90aW1lIjoxNjczMjc5Mjg2LCJ1c2VyX2lkIjoiTlVUaEpPTVBMR1RBUHM3UW5XdHB0OURTZU5YMiIsInN1YiI6Ik5VVGhKT01QTEdUQVBzN1FuV3RwdDlEU2VOWDIiLCJpYXQiOjE2NzMyNzkyODYsImV4cCI6MTY3MzI4Mjg4NiwiZW1haWwiOiJwYXRpZW50QHBhdGllbnQuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbInBhdGllbnRAcGF0aWVudC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.hvXRi89FOtD0eAMaJzh4ayw5dzH6Z9b5ioU4VwfIDYxrXBjUhUnuR2wVXoNBogToJzLqIrHV2pK416vFBfKCnD4XwgROlvc6Y3gUGeNQH2W_3zHGGkAiWd5qaTRfqcKPhbqocrAzw26hmXYuVHllwOwIxNUqjojDclj7rnN8okKZBKByi-rG8sVSTe2sN2wcsl-h6YY8iXxP-V350a3NxYQSB2aQOPRgisY8L5ym81igHgmE6B8ocyA2gf-e4J3A05zREmp0p_bAtoJkOHMhOFy75_AmqAGQ2qcP91FJzjN5nUDDVr0PkLMNbMhBBk_-n8u8KewqSoZTv0GCUwaOuA\"\n}\n\n```\n\nOnce you get the token, the user has to copy & paste it as a bearer token in all routes required.\n\n**This route only return a token if the user already exists, if not the user will see an error like the following:**\n\n``` json\n{\n    \"error\": {\n        \"code\": 400,\n        \"message\": \"EMAIL_NOT_FOUND\",\n        \"errors\": [\n            {\n                \"message\": \"EMAIL_NOT_FOUND\",\n                \"domain\": \"global\",\n                \"reason\": \"invalid\"\n            }\n        ]\n    }\n}\n\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Disable account",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudDMiLCJyb2xlIjoicGF0aWVudCIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9obXMtam9uYXRoYW5jYXN0aWxsbyIsImF1ZCI6Imhtcy1qb25hdGhhbmNhc3RpbGxvIiwiYXV0aF90aW1lIjoxNjczMjgwMTUyLCJ1c2VyX2lkIjoiTlVUaEpPTVBMR1RBUHM3UW5XdHB0OURTZU5YMiIsInN1YiI6Ik5VVGhKT01QTEdUQVBzN1FuV3RwdDlEU2VOWDIiLCJpYXQiOjE2NzMyODAxNTIsImV4cCI6MTY3MzI4Mzc1MiwiZW1haWwiOiJwYXRpZW50QHBhdGllbnQuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbInBhdGllbnRAcGF0aWVudC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.S8koiMo_YguyBaG9DPQyCIqohcnhCS7aniOLP9w2UIr08efoTPMoQDVS0KaiuGTXbJCL8bQqO6bHd-bMd6eeN61By8ImA-V49IjutTPdXzRmuCQ-7af54cBXVTQaVlxQJRt3OTgHTI7OAsLwIsnNrZqCCy6ySvUonNeChnXbKMXBEz0ddVKR0D_GPh_OY9rH20dMhnSckk6pgR3cWddpDcGN0eRKx_KU1ffh_aITwnKu-FNb-s0kpp5MARK4P-j_L9rEsB8saDbWnw-yHMKHlBiuGtIJ0VpA1Txxtc01OXCJ1Kur7yP2mP-EqzPMd6lZSvZHbpjIhkY52fhbrur9Yg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"disabled\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/user/disableaccount",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"disableaccount"
+							]
+						},
+						"description": "This route allow users to disable their account by using their valid tokens and providing a body:\n\n- disabled as true"
+					},
+					"response": []
+				}
+			],
+			"description": "These routes allows any person to:\n\n1. Create an acccount as a patient.\n2. Generate a token once an account was created (simulation of a login).\n3. Allow users to delete their accounts (Need authorization via tokens)"
+		},
+		{
+			"name": "Patient routes",
+			"item": [
+				{
+					"name": "Generate Token for patients",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"patient@patient.com\",\r\n    \"password\":\"123456789\",\r\n    \"returnSecureToken\":true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyCZpC9dgIcL3LEwi77H-sEuP1zQndiPoG8",
+							"protocol": "https",
+							"host": [
+								"www",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"identitytoolkit",
+								"v3",
+								"relyingparty",
+								"verifyPassword"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "AIzaSyCZpC9dgIcL3LEwi77H-sEuP1zQndiPoG8"
+								}
+							]
+						},
+						"description": "This route allows a patient to simulate a login interface. It uses a personal firebase key to get the information. In the body, the user must provide:\n\n- Email\n- Password\n- returnSecureToken as true\n    \n\nIt will return a token like the following:\n\n``` json\n{\n    \"idToken\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudDMiLCJyb2xlIjoicGF0aWVudCIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9obXMtam9uYXRoYW5jYXN0aWxsbyIsImF1ZCI6Imhtcy1qb25hdGhhbmNhc3RpbGxvIiwiYXV0aF90aW1lIjoxNjczMjc5Mjg2LCJ1c2VyX2lkIjoiTlVUaEpPTVBMR1RBUHM3UW5XdHB0OURTZU5YMiIsInN1YiI6Ik5VVGhKT01QTEdUQVBzN1FuV3RwdDlEU2VOWDIiLCJpYXQiOjE2NzMyNzkyODYsImV4cCI6MTY3MzI4Mjg4NiwiZW1haWwiOiJwYXRpZW50QHBhdGllbnQuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbInBhdGllbnRAcGF0aWVudC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.hvXRi89FOtD0eAMaJzh4ayw5dzH6Z9b5ioU4VwfIDYxrXBjUhUnuR2wVXoNBogToJzLqIrHV2pK416vFBfKCnD4XwgROlvc6Y3gUGeNQH2W_3zHGGkAiWd5qaTRfqcKPhbqocrAzw26hmXYuVHllwOwIxNUqjojDclj7rnN8okKZBKByi-rG8sVSTe2sN2wcsl-h6YY8iXxP-V350a3NxYQSB2aQOPRgisY8L5ym81igHgmE6B8ocyA2gf-e4J3A05zREmp0p_bAtoJkOHMhOFy75_AmqAGQ2qcP91FJzjN5nUDDVr0PkLMNbMhBBk_-n8u8KewqSoZTv0GCUwaOuA\"\n}\n\n```\n\nOnce you get the token, the user has to copy & paste it as a bearer token in all routes required.\n\n**This route only return a token if the user already exists, if not the user will see an error like the following:**\n\n``` json\n{\n    \"error\": {\n        \"code\": 400,\n        \"message\": \"EMAIL_NOT_FOUND\",\n        \"errors\": [\n            {\n                \"message\": \"EMAIL_NOT_FOUND\",\n                \"domain\": \"global\",\n                \"reason\": \"invalid\"\n            }\n        ]\n    }\n}\n\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new appointment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImNlOWI4ODBmODE4MmRkYTU1N2Y3YzcwZTIwZTRlMzcwZTNkMTI3NDciLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudCIsInJvbGUiOiJwYXRpZW50IiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2htcy1qb25hdGhhbmNhc3RpbGxvIiwiYXVkIjoiaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdXRoX3RpbWUiOjE2NzMwMzA3NjUsInVzZXJfaWQiOiJQam01ZVBkZkJiTmdQWTBQeDRtUFBmS29vU3ExIiwic3ViIjoiUGptNWVQZGZCYk5nUFkwUHg0bVBQZktvb1NxMSIsImlhdCI6MTY3MzAzMDc2NSwiZXhwIjoxNjczMDM0MzY1LCJlbWFpbCI6InBhdGllbnRAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicGF0aWVudEB0ZXN0LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.JudVQHjq9AkhOzxche6uC5lP0VMNJyRra2Gz-wdIKMapJ3lhhOfWT5HSwTA5L0YODKAtaCxF6g-_QqKjyh3QVE3Fh04Tv3aCr_L8EqpSOdv8pFwQW67pvkEVX7R5FTJ3nFh1yjDz3K2PnTUUKBdssohuvQK_GdfaRiQgj87PtPMT5UolktNJuHR3Bp-Nc6rH5qKsz1h9b82nIGuwPxON_dMW-8IAkNQd0naz4rmB9WjOI1dwhlETV6K0GrNywYYSPCuEfdWMWEEwFDjskmepHUJ6peLM6RjMQpOAF4RbjqafmUd1dOKv1kIGEQG17swI9HqOyT1RJgRR-E7Dy8-VJQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"doctor_id\": 2,\r\n    \"date\": \"2023-01-07\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/patient/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"patient",
+								""
+							]
+						},
+						"description": "This route allows a patient to create a new appointment, the patient has to provide the following information in the body:\n\n- Doctor id\n- Date\n    \n\n**Bearer token needed to access this route.**"
+					},
+					"response": []
+				},
+				{
+					"name": "Read an appointment of the patient by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImNlOWI4ODBmODE4MmRkYTU1N2Y3YzcwZTIwZTRlMzcwZTNkMTI3NDciLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudCIsInJvbGUiOiJwYXRpZW50IiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2htcy1qb25hdGhhbmNhc3RpbGxvIiwiYXVkIjoiaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdXRoX3RpbWUiOjE2NzMwMzA3NjUsInVzZXJfaWQiOiJQam01ZVBkZkJiTmdQWTBQeDRtUFBmS29vU3ExIiwic3ViIjoiUGptNWVQZGZCYk5nUFkwUHg0bVBQZktvb1NxMSIsImlhdCI6MTY3MzAzMDc2NSwiZXhwIjoxNjczMDM0MzY1LCJlbWFpbCI6InBhdGllbnRAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicGF0aWVudEB0ZXN0LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.JudVQHjq9AkhOzxche6uC5lP0VMNJyRra2Gz-wdIKMapJ3lhhOfWT5HSwTA5L0YODKAtaCxF6g-_QqKjyh3QVE3Fh04Tv3aCr_L8EqpSOdv8pFwQW67pvkEVX7R5FTJ3nFh1yjDz3K2PnTUUKBdssohuvQK_GdfaRiQgj87PtPMT5UolktNJuHR3Bp-Nc6rH5qKsz1h9b82nIGuwPxON_dMW-8IAkNQd0naz4rmB9WjOI1dwhlETV6K0GrNywYYSPCuEfdWMWEEwFDjskmepHUJ6peLM6RjMQpOAF4RbjqafmUd1dOKv1kIGEQG17swI9HqOyT1RJgRR-E7Dy8-VJQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/patient/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"patient",
+								"1"
+							]
+						},
+						"description": "This route allows a patient to read an appointment by passing the appointment id as param (only an appointment id related to the authenticated patient will be valid).\n\n**Bearer token needed to access this route.**"
+					},
+					"response": []
+				},
+				{
+					"name": "List the appointments of the patient",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImNlOWI4ODBmODE4MmRkYTU1N2Y3YzcwZTIwZTRlMzcwZTNkMTI3NDciLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudCIsInJvbGUiOiJwYXRpZW50IiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2htcy1qb25hdGhhbmNhc3RpbGxvIiwiYXVkIjoiaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdXRoX3RpbWUiOjE2NzMwMzA3NjUsInVzZXJfaWQiOiJQam01ZVBkZkJiTmdQWTBQeDRtUFBmS29vU3ExIiwic3ViIjoiUGptNWVQZGZCYk5nUFkwUHg0bVBQZktvb1NxMSIsImlhdCI6MTY3MzAzMDc2NSwiZXhwIjoxNjczMDM0MzY1LCJlbWFpbCI6InBhdGllbnRAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicGF0aWVudEB0ZXN0LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.JudVQHjq9AkhOzxche6uC5lP0VMNJyRra2Gz-wdIKMapJ3lhhOfWT5HSwTA5L0YODKAtaCxF6g-_QqKjyh3QVE3Fh04Tv3aCr_L8EqpSOdv8pFwQW67pvkEVX7R5FTJ3nFh1yjDz3K2PnTUUKBdssohuvQK_GdfaRiQgj87PtPMT5UolktNJuHR3Bp-Nc6rH5qKsz1h9b82nIGuwPxON_dMW-8IAkNQd0naz4rmB9WjOI1dwhlETV6K0GrNywYYSPCuEfdWMWEEwFDjskmepHUJ6peLM6RjMQpOAF4RbjqafmUd1dOKv1kIGEQG17swI9HqOyT1RJgRR-E7Dy8-VJQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/patient/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"patient",
+								""
+							]
+						},
+						"description": "This route will allow patients to see all their appointments (only appointments related to the authenticated patient will be displayed).\n\n**Bearer token needed to access this route.**"
+					},
+					"response": []
+				},
+				{
+					"name": "Pagination",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImNlOWI4ODBmODE4MmRkYTU1N2Y3YzcwZTIwZTRlMzcwZTNkMTI3NDciLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudCIsInJvbGUiOiJwYXRpZW50IiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2htcy1qb25hdGhhbmNhc3RpbGxvIiwiYXVkIjoiaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdXRoX3RpbWUiOjE2NzMwMzA3NjUsInVzZXJfaWQiOiJQam01ZVBkZkJiTmdQWTBQeDRtUFBmS29vU3ExIiwic3ViIjoiUGptNWVQZGZCYk5nUFkwUHg0bVBQZktvb1NxMSIsImlhdCI6MTY3MzAzMDc2NSwiZXhwIjoxNjczMDM0MzY1LCJlbWFpbCI6InBhdGllbnRAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicGF0aWVudEB0ZXN0LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.JudVQHjq9AkhOzxche6uC5lP0VMNJyRra2Gz-wdIKMapJ3lhhOfWT5HSwTA5L0YODKAtaCxF6g-_QqKjyh3QVE3Fh04Tv3aCr_L8EqpSOdv8pFwQW67pvkEVX7R5FTJ3nFh1yjDz3K2PnTUUKBdssohuvQK_GdfaRiQgj87PtPMT5UolktNJuHR3Bp-Nc6rH5qKsz1h9b82nIGuwPxON_dMW-8IAkNQd0naz4rmB9WjOI1dwhlETV6K0GrNywYYSPCuEfdWMWEEwFDjskmepHUJ6peLM6RjMQpOAF4RbjqafmUd1dOKv1kIGEQG17swI9HqOyT1RJgRR-E7Dy8-VJQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/patient/?offset=0&limit=5",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"patient",
+								""
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						},
+						"description": "To use pagination in this route is necessary to assign two params:\n\n- offset: Param to set the start point to search\n- limit: The amount of items that will be displayed\n    \n\nBoth receive numbers.\n\n**By default, offset is set on 0 and limit on 5.**"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete and appointment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImNlOWI4ODBmODE4MmRkYTU1N2Y3YzcwZTIwZTRlMzcwZTNkMTI3NDciLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudCIsInJvbGUiOiJwYXRpZW50IiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2htcy1qb25hdGhhbmNhc3RpbGxvIiwiYXVkIjoiaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdXRoX3RpbWUiOjE2NzMwMzA3NjUsInVzZXJfaWQiOiJQam01ZVBkZkJiTmdQWTBQeDRtUFBmS29vU3ExIiwic3ViIjoiUGptNWVQZGZCYk5nUFkwUHg0bVBQZktvb1NxMSIsImlhdCI6MTY3MzAzMDc2NSwiZXhwIjoxNjczMDM0MzY1LCJlbWFpbCI6InBhdGllbnRAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicGF0aWVudEB0ZXN0LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.JudVQHjq9AkhOzxche6uC5lP0VMNJyRra2Gz-wdIKMapJ3lhhOfWT5HSwTA5L0YODKAtaCxF6g-_QqKjyh3QVE3Fh04Tv3aCr_L8EqpSOdv8pFwQW67pvkEVX7R5FTJ3nFh1yjDz3K2PnTUUKBdssohuvQK_GdfaRiQgj87PtPMT5UolktNJuHR3Bp-Nc6rH5qKsz1h9b82nIGuwPxON_dMW-8IAkNQd0naz4rmB9WjOI1dwhlETV6K0GrNywYYSPCuEfdWMWEEwFDjskmepHUJ6peLM6RjMQpOAF4RbjqafmUd1dOKv1kIGEQG17swI9HqOyT1RJgRR-E7Dy8-VJQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/patient/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"patient",
+								"1"
+							]
+						},
+						"description": "This route allows a patient to delete an appointment by passing an appointment id as param (only an appointment id related to the authenticated patient will be valid).\n\n**Bearer token needed to access this route.**"
+					},
+					"response": []
+				}
+			],
+			"description": "These routes allows any patient to:\n\n1. Generate a patient token\n2. Create a new appointment\n3. Get an appointment by passing an appointment id\n4. List the appointments of the user\n5. Delete an appointment by passing an appointment id"
+		},
+		{
+			"name": "Doctor routes",
+			"item": [
+				{
+					"name": "Generate Token for doctors",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"doctor@doctor.com\",\r\n    \"password\":\"123456789\",\r\n    \"returnSecureToken\":true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyCZpC9dgIcL3LEwi77H-sEuP1zQndiPoG8",
+							"protocol": "https",
+							"host": [
+								"www",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"identitytoolkit",
+								"v3",
+								"relyingparty",
+								"verifyPassword"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "AIzaSyCZpC9dgIcL3LEwi77H-sEuP1zQndiPoG8"
+								}
+							]
+						},
+						"description": "This route allows a doctor to simulate a login interface. It uses a personal firebase key to get the information. In the body, the user must provide:\n\n- Email\n- Password\n- returnSecureToken as true\n    \n\nIt will return a token like the following:\n\n``` json\n{\n    \"idToken\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudDMiLCJyb2xlIjoicGF0aWVudCIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9obXMtam9uYXRoYW5jYXN0aWxsbyIsImF1ZCI6Imhtcy1qb25hdGhhbmNhc3RpbGxvIiwiYXV0aF90aW1lIjoxNjczMjc5Mjg2LCJ1c2VyX2lkIjoiTlVUaEpPTVBMR1RBUHM3UW5XdHB0OURTZU5YMiIsInN1YiI6Ik5VVGhKT01QTEdUQVBzN1FuV3RwdDlEU2VOWDIiLCJpYXQiOjE2NzMyNzkyODYsImV4cCI6MTY3MzI4Mjg4NiwiZW1haWwiOiJwYXRpZW50QHBhdGllbnQuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbInBhdGllbnRAcGF0aWVudC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.hvXRi89FOtD0eAMaJzh4ayw5dzH6Z9b5ioU4VwfIDYxrXBjUhUnuR2wVXoNBogToJzLqIrHV2pK416vFBfKCnD4XwgROlvc6Y3gUGeNQH2W_3zHGGkAiWd5qaTRfqcKPhbqocrAzw26hmXYuVHllwOwIxNUqjojDclj7rnN8okKZBKByi-rG8sVSTe2sN2wcsl-h6YY8iXxP-V350a3NxYQSB2aQOPRgisY8L5ym81igHgmE6B8ocyA2gf-e4J3A05zREmp0p_bAtoJkOHMhOFy75_AmqAGQ2qcP91FJzjN5nUDDVr0PkLMNbMhBBk_-n8u8KewqSoZTv0GCUwaOuA\"\n}\n\n```\n\nOnce you get the token, the user has to copy & paste it as a bearer token in all routes required.\n\n**This route only return a token if the user already exists, if not the user will see an error like the following:**\n\n``` json\n{\n    \"error\": {\n        \"code\": 400,\n        \"message\": \"EMAIL_NOT_FOUND\",\n        \"errors\": [\n            {\n                \"message\": \"EMAIL_NOT_FOUND\",\n                \"domain\": \"global\",\n                \"reason\": \"invalid\"\n            }\n        ]\n    }\n}\n\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "List all appointments of the doctor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudDMiLCJyb2xlIjoicGF0aWVudCIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9obXMtam9uYXRoYW5jYXN0aWxsbyIsImF1ZCI6Imhtcy1qb25hdGhhbmNhc3RpbGxvIiwiYXV0aF90aW1lIjoxNjczMjgwMTUyLCJ1c2VyX2lkIjoiTlVUaEpPTVBMR1RBUHM3UW5XdHB0OURTZU5YMiIsInN1YiI6Ik5VVGhKT01QTEdUQVBzN1FuV3RwdDlEU2VOWDIiLCJpYXQiOjE2NzMyODAxNTIsImV4cCI6MTY3MzI4Mzc1MiwiZW1haWwiOiJwYXRpZW50QHBhdGllbnQuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbInBhdGllbnRAcGF0aWVudC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.S8koiMo_YguyBaG9DPQyCIqohcnhCS7aniOLP9w2UIr08efoTPMoQDVS0KaiuGTXbJCL8bQqO6bHd-bMd6eeN61By8ImA-V49IjutTPdXzRmuCQ-7af54cBXVTQaVlxQJRt3OTgHTI7OAsLwIsnNrZqCCy6ySvUonNeChnXbKMXBEz0ddVKR0D_GPh_OY9rH20dMhnSckk6pgR3cWddpDcGN0eRKx_KU1ffh_aITwnKu-FNb-s0kpp5MARK4P-j_L9rEsB8saDbWnw-yHMKHlBiuGtIJ0VpA1Txxtc01OXCJ1Kur7yP2mP-EqzPMd6lZSvZHbpjIhkY52fhbrur9Yg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/doctor",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"doctor"
+							]
+						},
+						"description": "This route will allow doctors to see all their appointments (only appointments related to the authenticated doctor will be displayed).\n\n**Bearer token needed to access this route.**"
+					},
+					"response": []
+				},
+				{
+					"name": "Pagination",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudDMiLCJyb2xlIjoicGF0aWVudCIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9obXMtam9uYXRoYW5jYXN0aWxsbyIsImF1ZCI6Imhtcy1qb25hdGhhbmNhc3RpbGxvIiwiYXV0aF90aW1lIjoxNjczMjgwMTUyLCJ1c2VyX2lkIjoiTlVUaEpPTVBMR1RBUHM3UW5XdHB0OURTZU5YMiIsInN1YiI6Ik5VVGhKT01QTEdUQVBzN1FuV3RwdDlEU2VOWDIiLCJpYXQiOjE2NzMyODAxNTIsImV4cCI6MTY3MzI4Mzc1MiwiZW1haWwiOiJwYXRpZW50QHBhdGllbnQuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbInBhdGllbnRAcGF0aWVudC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.S8koiMo_YguyBaG9DPQyCIqohcnhCS7aniOLP9w2UIr08efoTPMoQDVS0KaiuGTXbJCL8bQqO6bHd-bMd6eeN61By8ImA-V49IjutTPdXzRmuCQ-7af54cBXVTQaVlxQJRt3OTgHTI7OAsLwIsnNrZqCCy6ySvUonNeChnXbKMXBEz0ddVKR0D_GPh_OY9rH20dMhnSckk6pgR3cWddpDcGN0eRKx_KU1ffh_aITwnKu-FNb-s0kpp5MARK4P-j_L9rEsB8saDbWnw-yHMKHlBiuGtIJ0VpA1Txxtc01OXCJ1Kur7yP2mP-EqzPMd6lZSvZHbpjIhkY52fhbrur9Yg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/doctor?offset=0&limit=5",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"doctor"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						},
+						"description": "To use pagination in this route is necessary to assign two params:\n\n- offset: Param to set the start point to search\n- limit: The amount of items that will be displayed\n    \n\nBoth receive numbers.\n\n**By default, offset is set on 0 and limit on 5.**"
+					},
+					"response": []
+				},
+				{
+					"name": "Filter appointments by date",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudDMiLCJyb2xlIjoicGF0aWVudCIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9obXMtam9uYXRoYW5jYXN0aWxsbyIsImF1ZCI6Imhtcy1qb25hdGhhbmNhc3RpbGxvIiwiYXV0aF90aW1lIjoxNjczMjgwMTUyLCJ1c2VyX2lkIjoiTlVUaEpPTVBMR1RBUHM3UW5XdHB0OURTZU5YMiIsInN1YiI6Ik5VVGhKT01QTEdUQVBzN1FuV3RwdDlEU2VOWDIiLCJpYXQiOjE2NzMyODAxNTIsImV4cCI6MTY3MzI4Mzc1MiwiZW1haWwiOiJwYXRpZW50QHBhdGllbnQuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbInBhdGllbnRAcGF0aWVudC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.S8koiMo_YguyBaG9DPQyCIqohcnhCS7aniOLP9w2UIr08efoTPMoQDVS0KaiuGTXbJCL8bQqO6bHd-bMd6eeN61By8ImA-V49IjutTPdXzRmuCQ-7af54cBXVTQaVlxQJRt3OTgHTI7OAsLwIsnNrZqCCy6ySvUonNeChnXbKMXBEz0ddVKR0D_GPh_OY9rH20dMhnSckk6pgR3cWddpDcGN0eRKx_KU1ffh_aITwnKu-FNb-s0kpp5MARK4P-j_L9rEsB8saDbWnw-yHMKHlBiuGtIJ0VpA1Txxtc01OXCJ1Kur7yP2mP-EqzPMd6lZSvZHbpjIhkY52fhbrur9Yg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/doctor?dateFilter=2023-01-13",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"doctor"
+							],
+							"query": [
+								{
+									"key": "dateFilter",
+									"value": "2023-01-13"
+								}
+							]
+						},
+						"description": "To allow a doctor to filter appointments by date is necessary to asign a param:\n\n- dateFilter\n    \n\nReceive a string with the date"
+					},
+					"response": []
+				},
+				{
+					"name": "Filter appointments by patient",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudDMiLCJyb2xlIjoicGF0aWVudCIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9obXMtam9uYXRoYW5jYXN0aWxsbyIsImF1ZCI6Imhtcy1qb25hdGhhbmNhc3RpbGxvIiwiYXV0aF90aW1lIjoxNjczMjgwMTUyLCJ1c2VyX2lkIjoiTlVUaEpPTVBMR1RBUHM3UW5XdHB0OURTZU5YMiIsInN1YiI6Ik5VVGhKT01QTEdUQVBzN1FuV3RwdDlEU2VOWDIiLCJpYXQiOjE2NzMyODAxNTIsImV4cCI6MTY3MzI4Mzc1MiwiZW1haWwiOiJwYXRpZW50QHBhdGllbnQuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbInBhdGllbnRAcGF0aWVudC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.S8koiMo_YguyBaG9DPQyCIqohcnhCS7aniOLP9w2UIr08efoTPMoQDVS0KaiuGTXbJCL8bQqO6bHd-bMd6eeN61By8ImA-V49IjutTPdXzRmuCQ-7af54cBXVTQaVlxQJRt3OTgHTI7OAsLwIsnNrZqCCy6ySvUonNeChnXbKMXBEz0ddVKR0D_GPh_OY9rH20dMhnSckk6pgR3cWddpDcGN0eRKx_KU1ffh_aITwnKu-FNb-s0kpp5MARK4P-j_L9rEsB8saDbWnw-yHMKHlBiuGtIJ0VpA1Txxtc01OXCJ1Kur7yP2mP-EqzPMd6lZSvZHbpjIhkY52fhbrur9Yg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/doctor?patientFilter=1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"doctor"
+							],
+							"query": [
+								{
+									"key": "patientFilter",
+									"value": "1"
+								}
+							]
+						},
+						"description": "To allow a doctor to filter appointments by patient is necessary to asign a param:\n\n- patientFilter\n    \n\nReceives a number with the patient id"
+					},
+					"response": []
+				},
+				{
+					"name": "Order by newest",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiZG9jdG9yIiwicm9sZSI6ImRvY3RvciIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9obXMtam9uYXRoYW5jYXN0aWxsbyIsImF1ZCI6Imhtcy1qb25hdGhhbmNhc3RpbGxvIiwiYXV0aF90aW1lIjoxNjczMzY1MTIyLCJ1c2VyX2lkIjoiSENRczQyeWN1S1RBOWV0YzliQk9vajBvTDd6MiIsInN1YiI6IkhDUXM0MnljdUtUQTlldGM5YkJPb2owb0w3ejIiLCJpYXQiOjE2NzMzNjUxMjIsImV4cCI6MTY3MzM2ODcyMiwiZW1haWwiOiJkb2N0b3JAZG9jdG9yLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJkb2N0b3JAZG9jdG9yLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.cI0LeLfJfMt225YaVvdePEdDvshHSDwWTSHCQlxvbSSYdysfLY6wBoq60KxpJIgK0QPesTfhPuthBprHkVl4KXYPathOuFjdlhR_4fK1kjACGFZWtfgXatZBuJH9q-IXeJLT1rqiADjUXD9EIj2QvNnCdz4x9XvtXVTsItfu-oQBRbXS7SXZTPsGfBoePRTkOlLEo105nGj8AlUVroKBNgXaRebt5EexuNpVa9c5cM-Glz2kCK6vHNMwFy5XHh0S6aoQ5B2Z5SOYMSFUJTPsc1ylaNa8K0cKnaMJEJxKJWYZlR9oRTrEXqPt1ItEZA5KpTqRx5-LUxYHwaaCPchO3A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/doctor?orderBy=ASC",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"doctor"
+							],
+							"query": [
+								{
+									"key": "orderBy",
+									"value": "ASC"
+								}
+							]
+						},
+						"description": "To allow a doctor to order appointments by newest is necessary to asign a param:\n\n- orderBy\n    \n\nRecieves a string with a \"ASC\""
+					},
+					"response": []
+				},
+				{
+					"name": "Order by oldest",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudDMiLCJyb2xlIjoicGF0aWVudCIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9obXMtam9uYXRoYW5jYXN0aWxsbyIsImF1ZCI6Imhtcy1qb25hdGhhbmNhc3RpbGxvIiwiYXV0aF90aW1lIjoxNjczMjgwMTUyLCJ1c2VyX2lkIjoiTlVUaEpPTVBMR1RBUHM3UW5XdHB0OURTZU5YMiIsInN1YiI6Ik5VVGhKT01QTEdUQVBzN1FuV3RwdDlEU2VOWDIiLCJpYXQiOjE2NzMyODAxNTIsImV4cCI6MTY3MzI4Mzc1MiwiZW1haWwiOiJwYXRpZW50QHBhdGllbnQuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbInBhdGllbnRAcGF0aWVudC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.S8koiMo_YguyBaG9DPQyCIqohcnhCS7aniOLP9w2UIr08efoTPMoQDVS0KaiuGTXbJCL8bQqO6bHd-bMd6eeN61By8ImA-V49IjutTPdXzRmuCQ-7af54cBXVTQaVlxQJRt3OTgHTI7OAsLwIsnNrZqCCy6ySvUonNeChnXbKMXBEz0ddVKR0D_GPh_OY9rH20dMhnSckk6pgR3cWddpDcGN0eRKx_KU1ffh_aITwnKu-FNb-s0kpp5MARK4P-j_L9rEsB8saDbWnw-yHMKHlBiuGtIJ0VpA1Txxtc01OXCJ1Kur7yP2mP-EqzPMd6lZSvZHbpjIhkY52fhbrur9Yg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/doctor?orderBy=DESC",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"doctor"
+							],
+							"query": [
+								{
+									"key": "orderBy",
+									"value": "DESC"
+								}
+							]
+						},
+						"description": "To allow a doctor to order appointments by oldest is necessary to asign a param:\n\n- orderBy\n    \n\nRecieves a string with a \"DESC\""
+					},
+					"response": []
+				},
+				{
+					"name": "Change date",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudDMiLCJyb2xlIjoicGF0aWVudCIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9obXMtam9uYXRoYW5jYXN0aWxsbyIsImF1ZCI6Imhtcy1qb25hdGhhbmNhc3RpbGxvIiwiYXV0aF90aW1lIjoxNjczMjgwMTUyLCJ1c2VyX2lkIjoiTlVUaEpPTVBMR1RBUHM3UW5XdHB0OURTZU5YMiIsInN1YiI6Ik5VVGhKT01QTEdUQVBzN1FuV3RwdDlEU2VOWDIiLCJpYXQiOjE2NzMyODAxNTIsImV4cCI6MTY3MzI4Mzc1MiwiZW1haWwiOiJwYXRpZW50QHBhdGllbnQuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbInBhdGllbnRAcGF0aWVudC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.S8koiMo_YguyBaG9DPQyCIqohcnhCS7aniOLP9w2UIr08efoTPMoQDVS0KaiuGTXbJCL8bQqO6bHd-bMd6eeN61By8ImA-V49IjutTPdXzRmuCQ-7af54cBXVTQaVlxQJRt3OTgHTI7OAsLwIsnNrZqCCy6ySvUonNeChnXbKMXBEz0ddVKR0D_GPh_OY9rH20dMhnSckk6pgR3cWddpDcGN0eRKx_KU1ffh_aITwnKu-FNb-s0kpp5MARK4P-j_L9rEsB8saDbWnw-yHMKHlBiuGtIJ0VpA1Txxtc01OXCJ1Kur7yP2mP-EqzPMd6lZSvZHbpjIhkY52fhbrur9Yg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newDate\": \"2023-01-13\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/doctor/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"doctor",
+								"1"
+							]
+						},
+						"description": "Thise route will allow a doctor to change the date of an appointment by passing the appointment id as param (only an appointment id related to the authenticated doctor will be valid) and the new date in the body:\n\n- newDate\n    \n\n**Bearer token needed to access this route.**"
+					},
+					"response": []
+				}
+			],
+			"description": "These routes allows any doctor to:\n\n1. Generate a doctor token\n2. List all appointments of the doctor\n3. Change the date of an appointment"
+		},
+		{
+			"name": "Admin routes",
+			"item": [
+				{
+					"name": "Generate Token for admins",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"admin@admin.com\",\r\n    \"password\":\"123456789\",\r\n    \"returnSecureToken\":true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyCZpC9dgIcL3LEwi77H-sEuP1zQndiPoG8",
+							"protocol": "https",
+							"host": [
+								"www",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"identitytoolkit",
+								"v3",
+								"relyingparty",
+								"verifyPassword"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "AIzaSyCZpC9dgIcL3LEwi77H-sEuP1zQndiPoG8"
+								}
+							]
+						},
+						"description": "This route allows an admin to simulate a login interface. It uses a personal firebase key to get the information. In the body, the user must provide:\n\n- Email\n- Password\n- returnSecureToken as true\n    \n\nIt will return a token like the following:\n\n``` json\n{\n    \"idToken\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudDMiLCJyb2xlIjoicGF0aWVudCIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9obXMtam9uYXRoYW5jYXN0aWxsbyIsImF1ZCI6Imhtcy1qb25hdGhhbmNhc3RpbGxvIiwiYXV0aF90aW1lIjoxNjczMjc5Mjg2LCJ1c2VyX2lkIjoiTlVUaEpPTVBMR1RBUHM3UW5XdHB0OURTZU5YMiIsInN1YiI6Ik5VVGhKT01QTEdUQVBzN1FuV3RwdDlEU2VOWDIiLCJpYXQiOjE2NzMyNzkyODYsImV4cCI6MTY3MzI4Mjg4NiwiZW1haWwiOiJwYXRpZW50QHBhdGllbnQuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbInBhdGllbnRAcGF0aWVudC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.hvXRi89FOtD0eAMaJzh4ayw5dzH6Z9b5ioU4VwfIDYxrXBjUhUnuR2wVXoNBogToJzLqIrHV2pK416vFBfKCnD4XwgROlvc6Y3gUGeNQH2W_3zHGGkAiWd5qaTRfqcKPhbqocrAzw26hmXYuVHllwOwIxNUqjojDclj7rnN8okKZBKByi-rG8sVSTe2sN2wcsl-h6YY8iXxP-V350a3NxYQSB2aQOPRgisY8L5ym81igHgmE6B8ocyA2gf-e4J3A05zREmp0p_bAtoJkOHMhOFy75_AmqAGQ2qcP91FJzjN5nUDDVr0PkLMNbMhBBk_-n8u8KewqSoZTv0GCUwaOuA\"\n}\n\n```\n\nOnce you get the token, the user has to copy & paste it as a bearer token in all routes required.\n\n**This route only return a token if the user already exists, if not the user will see an error like the following:**\n\n``` json\n{\n    \"error\": {\n        \"code\": 400,\n        \"message\": \"EMAIL_NOT_FOUND\",\n        \"errors\": [\n            {\n                \"message\": \"EMAIL_NOT_FOUND\",\n                \"domain\": \"global\",\n                \"reason\": \"invalid\"\n            }\n        ]\n    }\n}\n\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new doctor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdWQiOiJobXMtam9uYXRoYW5jYXN0aWxsbyIsImF1dGhfdGltZSI6MTY3MzMwMjk4MiwidXNlcl9pZCI6InBFSk1DNllQNXhaMEVOZk9vaVJ6Wmd3OG9xdDIiLCJzdWIiOiJwRUpNQzZZUDV4WjBFTmZPb2lSelpndzhvcXQyIiwiaWF0IjoxNjczMzAyOTgyLCJleHAiOjE2NzMzMDY1ODIsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImFkbWluQGFkbWluLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.gTaze61MjeXz1wcRqh9goYTJM0TQPP__tdM8Ml1kVpKVmPOTP63dsdND4-dAEV6Nmp1d9esr_04-IEbcZZeKTdzQy7Z5EAsEWMFDF1jSl2yF9icucLcC-0_zE_KDstsbLeewYDu51vJ9p_fv9HUsB8rpDmFCSvsspBL7AZcCHnB14ZKTQaLL5CSfLLSXH-_BWN4N7sg1pnwM6La_wIxHz622KKn2RBZ1d-IKSQXEpjNfYJbRDy63uKdUrw5kXvSCL_oPWEpfzgUowLjRZHZ6vaTZQHlSBceN4mXvg1KZNGAssfRwzjLV93kucmuCsBW5SI6lyqpzqN0OSY0hqLLHog",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"displayName\": \"doctor\",\r\n    \"email\": \"doctor@doctor.com\",\r\n    \"password\": \"123456789\",\r\n    \"departmentId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/admin/doctors/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"doctors",
+								""
+							]
+						},
+						"description": "This routes will allow an admin to create a new doctor, the admin has to provide the following information:\n\n- Displayname\n- Email\n- password\n- departmentId\n    \n\n**Bearer token needed to access this route.**"
+					},
+					"response": []
+				},
+				{
+					"name": "Change the isDisabled property of user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdWQiOiJobXMtam9uYXRoYW5jYXN0aWxsbyIsImF1dGhfdGltZSI6MTY3MzM2ODA0OCwidXNlcl9pZCI6InBFSk1DNllQNXhaMEVOZk9vaVJ6Wmd3OG9xdDIiLCJzdWIiOiJwRUpNQzZZUDV4WjBFTmZPb2lSelpndzhvcXQyIiwiaWF0IjoxNjczMzY4MDQ4LCJleHAiOjE2NzMzNzE2NDgsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImFkbWluQGFkbWluLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.poIjgmAelMElydd_mmelNtVgSwi2VGa1TK_DtczccqlGPD4qFiojxa3O8WNeFZtwdouFgqVUhAmGfeuRND7V7Lof1Zt6PSv2FEZlybyPQVCbMKbhAfAe63EAUxmCjL29f4AVd0QA_dgXWGyGo4AwwAPmsIQ0Cph7uvdBK0XreLpEQvTQgz6XIuRk5tMgHMKbwtTzcR70t6BT0az69FTjWRJklFOXkvxMticDKiWFS8Ci1MZCUhE6c7Jy5Ta6wcn9FU0UAINo-oHcmlX4WTFD6ZZB26kKnvFzrvGzBNIF_zth62IdFYNhiCLBHhiwkwh2OvJrjODFRTJs5epd9thhFQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"disabled\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/admin/users/IUyslSLvsYPxvusnwyY7VvL1Tf93",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"users",
+								"IUyslSLvsYPxvusnwyY7VvL1Tf93"
+							]
+						},
+						"description": "This route will allow the admin to reactivate the users accounts by passing a user id as param and the following information in the body:\n\n- Disabled as false\n    \n\n**Bearer token needed to access this route.**"
+					},
+					"response": []
+				},
+				{
+					"name": "List all appointments",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImNlOWI4ODBmODE4MmRkYTU1N2Y3YzcwZTIwZTRlMzcwZTNkMTI3NDciLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudCIsInJvbGUiOiJwYXRpZW50IiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2htcy1qb25hdGhhbmNhc3RpbGxvIiwiYXVkIjoiaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdXRoX3RpbWUiOjE2NzMwMzA3NjUsInVzZXJfaWQiOiJQam01ZVBkZkJiTmdQWTBQeDRtUFBmS29vU3ExIiwic3ViIjoiUGptNWVQZGZCYk5nUFkwUHg0bVBQZktvb1NxMSIsImlhdCI6MTY3MzAzMDc2NSwiZXhwIjoxNjczMDM0MzY1LCJlbWFpbCI6InBhdGllbnRAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicGF0aWVudEB0ZXN0LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.JudVQHjq9AkhOzxche6uC5lP0VMNJyRra2Gz-wdIKMapJ3lhhOfWT5HSwTA5L0YODKAtaCxF6g-_QqKjyh3QVE3Fh04Tv3aCr_L8EqpSOdv8pFwQW67pvkEVX7R5FTJ3nFh1yjDz3K2PnTUUKBdssohuvQK_GdfaRiQgj87PtPMT5UolktNJuHR3Bp-Nc6rH5qKsz1h9b82nIGuwPxON_dMW-8IAkNQd0naz4rmB9WjOI1dwhlETV6K0GrNywYYSPCuEfdWMWEEwFDjskmepHUJ6peLM6RjMQpOAF4RbjqafmUd1dOKv1kIGEQG17swI9HqOyT1RJgRR-E7Dy8-VJQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/admin/appointments",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"appointments"
+							]
+						},
+						"description": "This route will allow the admin to list all the appointments.\n\n**Bearer token needed to access this route.**"
+					},
+					"response": []
+				},
+				{
+					"name": "Pagination",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImNlOWI4ODBmODE4MmRkYTU1N2Y3YzcwZTIwZTRlMzcwZTNkMTI3NDciLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudCIsInJvbGUiOiJwYXRpZW50IiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2htcy1qb25hdGhhbmNhc3RpbGxvIiwiYXVkIjoiaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdXRoX3RpbWUiOjE2NzMwMzA3NjUsInVzZXJfaWQiOiJQam01ZVBkZkJiTmdQWTBQeDRtUFBmS29vU3ExIiwic3ViIjoiUGptNWVQZGZCYk5nUFkwUHg0bVBQZktvb1NxMSIsImlhdCI6MTY3MzAzMDc2NSwiZXhwIjoxNjczMDM0MzY1LCJlbWFpbCI6InBhdGllbnRAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicGF0aWVudEB0ZXN0LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.JudVQHjq9AkhOzxche6uC5lP0VMNJyRra2Gz-wdIKMapJ3lhhOfWT5HSwTA5L0YODKAtaCxF6g-_QqKjyh3QVE3Fh04Tv3aCr_L8EqpSOdv8pFwQW67pvkEVX7R5FTJ3nFh1yjDz3K2PnTUUKBdssohuvQK_GdfaRiQgj87PtPMT5UolktNJuHR3Bp-Nc6rH5qKsz1h9b82nIGuwPxON_dMW-8IAkNQd0naz4rmB9WjOI1dwhlETV6K0GrNywYYSPCuEfdWMWEEwFDjskmepHUJ6peLM6RjMQpOAF4RbjqafmUd1dOKv1kIGEQG17swI9HqOyT1RJgRR-E7Dy8-VJQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/admin/appointments?offset=0&limit=5",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"appointments"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						},
+						"description": "To use pagination in this route is necessary to assign two params:\n\n- offset: Param to set the start point to search\n- limit: The amount of items that will be displayed\n    \n\nBoth receive numbers.\n\n**By default, offset is set on 0 and limit on 5.**"
+					},
+					"response": []
+				},
+				{
+					"name": "Filter appointments by patient",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImNlOWI4ODBmODE4MmRkYTU1N2Y3YzcwZTIwZTRlMzcwZTNkMTI3NDciLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudCIsInJvbGUiOiJwYXRpZW50IiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2htcy1qb25hdGhhbmNhc3RpbGxvIiwiYXVkIjoiaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdXRoX3RpbWUiOjE2NzMwMzA3NjUsInVzZXJfaWQiOiJQam01ZVBkZkJiTmdQWTBQeDRtUFBmS29vU3ExIiwic3ViIjoiUGptNWVQZGZCYk5nUFkwUHg0bVBQZktvb1NxMSIsImlhdCI6MTY3MzAzMDc2NSwiZXhwIjoxNjczMDM0MzY1LCJlbWFpbCI6InBhdGllbnRAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicGF0aWVudEB0ZXN0LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.JudVQHjq9AkhOzxche6uC5lP0VMNJyRra2Gz-wdIKMapJ3lhhOfWT5HSwTA5L0YODKAtaCxF6g-_QqKjyh3QVE3Fh04Tv3aCr_L8EqpSOdv8pFwQW67pvkEVX7R5FTJ3nFh1yjDz3K2PnTUUKBdssohuvQK_GdfaRiQgj87PtPMT5UolktNJuHR3Bp-Nc6rH5qKsz1h9b82nIGuwPxON_dMW-8IAkNQd0naz4rmB9WjOI1dwhlETV6K0GrNywYYSPCuEfdWMWEEwFDjskmepHUJ6peLM6RjMQpOAF4RbjqafmUd1dOKv1kIGEQG17swI9HqOyT1RJgRR-E7Dy8-VJQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/admin/appointments?patientId=1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"appointments"
+							],
+							"query": [
+								{
+									"key": "patientId",
+									"value": "1"
+								}
+							]
+						},
+						"description": "To allow an admin to filter appointments by patient is necessary to asign a param:\n\n- patientId\n    \n\nRecieves a number with the patient id"
+					},
+					"response": []
+				},
+				{
+					"name": "Filter appointments by doctor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImNlOWI4ODBmODE4MmRkYTU1N2Y3YzcwZTIwZTRlMzcwZTNkMTI3NDciLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudCIsInJvbGUiOiJwYXRpZW50IiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2htcy1qb25hdGhhbmNhc3RpbGxvIiwiYXVkIjoiaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdXRoX3RpbWUiOjE2NzMwMzA3NjUsInVzZXJfaWQiOiJQam01ZVBkZkJiTmdQWTBQeDRtUFBmS29vU3ExIiwic3ViIjoiUGptNWVQZGZCYk5nUFkwUHg0bVBQZktvb1NxMSIsImlhdCI6MTY3MzAzMDc2NSwiZXhwIjoxNjczMDM0MzY1LCJlbWFpbCI6InBhdGllbnRAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicGF0aWVudEB0ZXN0LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.JudVQHjq9AkhOzxche6uC5lP0VMNJyRra2Gz-wdIKMapJ3lhhOfWT5HSwTA5L0YODKAtaCxF6g-_QqKjyh3QVE3Fh04Tv3aCr_L8EqpSOdv8pFwQW67pvkEVX7R5FTJ3nFh1yjDz3K2PnTUUKBdssohuvQK_GdfaRiQgj87PtPMT5UolktNJuHR3Bp-Nc6rH5qKsz1h9b82nIGuwPxON_dMW-8IAkNQd0naz4rmB9WjOI1dwhlETV6K0GrNywYYSPCuEfdWMWEEwFDjskmepHUJ6peLM6RjMQpOAF4RbjqafmUd1dOKv1kIGEQG17swI9HqOyT1RJgRR-E7Dy8-VJQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/admin/appointments?doctorId=1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"appointments"
+							],
+							"query": [
+								{
+									"key": "doctorId",
+									"value": "1"
+								}
+							]
+						},
+						"description": "To allow an admin to filter appointments by doctor is necessary to asign a param:\n\n- doctorId\n    \n\nRecieves a number with the doctor id"
+					},
+					"response": []
+				},
+				{
+					"name": "Filter appointments by actives",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImNlOWI4ODBmODE4MmRkYTU1N2Y3YzcwZTIwZTRlMzcwZTNkMTI3NDciLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudCIsInJvbGUiOiJwYXRpZW50IiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2htcy1qb25hdGhhbmNhc3RpbGxvIiwiYXVkIjoiaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdXRoX3RpbWUiOjE2NzMwMzA3NjUsInVzZXJfaWQiOiJQam01ZVBkZkJiTmdQWTBQeDRtUFBmS29vU3ExIiwic3ViIjoiUGptNWVQZGZCYk5nUFkwUHg0bVBQZktvb1NxMSIsImlhdCI6MTY3MzAzMDc2NSwiZXhwIjoxNjczMDM0MzY1LCJlbWFpbCI6InBhdGllbnRAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicGF0aWVudEB0ZXN0LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.JudVQHjq9AkhOzxche6uC5lP0VMNJyRra2Gz-wdIKMapJ3lhhOfWT5HSwTA5L0YODKAtaCxF6g-_QqKjyh3QVE3Fh04Tv3aCr_L8EqpSOdv8pFwQW67pvkEVX7R5FTJ3nFh1yjDz3K2PnTUUKBdssohuvQK_GdfaRiQgj87PtPMT5UolktNJuHR3Bp-Nc6rH5qKsz1h9b82nIGuwPxON_dMW-8IAkNQd0naz4rmB9WjOI1dwhlETV6K0GrNywYYSPCuEfdWMWEEwFDjskmepHUJ6peLM6RjMQpOAF4RbjqafmUd1dOKv1kIGEQG17swI9HqOyT1RJgRR-E7Dy8-VJQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/admin/appointments?appointmentActives=true",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"appointments"
+							],
+							"query": [
+								{
+									"key": "appointmentActives",
+									"value": "true"
+								}
+							]
+						},
+						"description": "To allow an admin to filter appointments by actives is necessary to asign a param:\n\n- appointmentActives\n    \n\nRecieves a true"
+					},
+					"response": []
+				},
+				{
+					"name": "Filter appointments by inactives",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImNlOWI4ODBmODE4MmRkYTU1N2Y3YzcwZTIwZTRlMzcwZTNkMTI3NDciLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudCIsInJvbGUiOiJwYXRpZW50IiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2htcy1qb25hdGhhbmNhc3RpbGxvIiwiYXVkIjoiaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdXRoX3RpbWUiOjE2NzMwMzA3NjUsInVzZXJfaWQiOiJQam01ZVBkZkJiTmdQWTBQeDRtUFBmS29vU3ExIiwic3ViIjoiUGptNWVQZGZCYk5nUFkwUHg0bVBQZktvb1NxMSIsImlhdCI6MTY3MzAzMDc2NSwiZXhwIjoxNjczMDM0MzY1LCJlbWFpbCI6InBhdGllbnRAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicGF0aWVudEB0ZXN0LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.JudVQHjq9AkhOzxche6uC5lP0VMNJyRra2Gz-wdIKMapJ3lhhOfWT5HSwTA5L0YODKAtaCxF6g-_QqKjyh3QVE3Fh04Tv3aCr_L8EqpSOdv8pFwQW67pvkEVX7R5FTJ3nFh1yjDz3K2PnTUUKBdssohuvQK_GdfaRiQgj87PtPMT5UolktNJuHR3Bp-Nc6rH5qKsz1h9b82nIGuwPxON_dMW-8IAkNQd0naz4rmB9WjOI1dwhlETV6K0GrNywYYSPCuEfdWMWEEwFDjskmepHUJ6peLM6RjMQpOAF4RbjqafmUd1dOKv1kIGEQG17swI9HqOyT1RJgRR-E7Dy8-VJQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/admin/appointments?appointmentActives=false",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"appointments"
+							],
+							"query": [
+								{
+									"key": "appointmentActives",
+									"value": "false"
+								}
+							]
+						},
+						"description": "To allow an admin to filter appointments by inactives is necessary to asign a param:\n\n- appointmentActives\n    \n\nRecieves a false"
+					},
+					"response": []
+				},
+				{
+					"name": "Order by Patient - Newest",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdWQiOiJobXMtam9uYXRoYW5jYXN0aWxsbyIsImF1dGhfdGltZSI6MTY3MzM2ODQ0MiwidXNlcl9pZCI6InBFSk1DNllQNXhaMEVOZk9vaVJ6Wmd3OG9xdDIiLCJzdWIiOiJwRUpNQzZZUDV4WjBFTmZPb2lSelpndzhvcXQyIiwiaWF0IjoxNjczMzY4NDQyLCJleHAiOjE2NzMzNzIwNDIsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImFkbWluQGFkbWluLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.HmQdmGvi468gVewTbQ5O6TPXU3N5-jWmyGFNuY3fZkVoR6y-Zedv9IKmR081PL2NT_MqEA_mOFuqBY5WFbW1YJrg3acAgV0S-sWgkQ9hPn2KXMchpHFv6b55hS0T0UXdt6sDAfLu4x-TEhKdrKSx9fy68Dx9gJFRjUbKS6nvsjDAeWW8FO6y3SIUWh5BLUQzlgTuhxO4EYwCVYYdeSzPEtrhBBYOFiilNfNmgIA6C_uX5z1VHrmpOJEiprwasTvRd08SyG7OydFNPKgyLGF4ubulToEZ9lqwMXT4THfPkQ-pJ9z_m2JiUC78IBfYVUX3bCxuL4oQTu9e78VCMi8_ZQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/admin/appointments?orderBy=patient-1-ASC",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"appointments"
+							],
+							"query": [
+								{
+									"key": "orderBy",
+									"value": "patient-1-ASC"
+								}
+							]
+						},
+						"description": "To allow an admin to filter appointments by patient's newest appointment is necessary to asign a param:\n\n- orderBy\n    \n\nRecieves a string that is divided by a \"-\":\n\npatient-1-ASC\n\n1. The word \"patient\"\n2. Patient id\n3. Order ASC"
+					},
+					"response": []
+				},
+				{
+					"name": "Order by Patient - Oldest",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdWQiOiJobXMtam9uYXRoYW5jYXN0aWxsbyIsImF1dGhfdGltZSI6MTY3MzM2ODQ0MiwidXNlcl9pZCI6InBFSk1DNllQNXhaMEVOZk9vaVJ6Wmd3OG9xdDIiLCJzdWIiOiJwRUpNQzZZUDV4WjBFTmZPb2lSelpndzhvcXQyIiwiaWF0IjoxNjczMzY4NDQyLCJleHAiOjE2NzMzNzIwNDIsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImFkbWluQGFkbWluLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.HmQdmGvi468gVewTbQ5O6TPXU3N5-jWmyGFNuY3fZkVoR6y-Zedv9IKmR081PL2NT_MqEA_mOFuqBY5WFbW1YJrg3acAgV0S-sWgkQ9hPn2KXMchpHFv6b55hS0T0UXdt6sDAfLu4x-TEhKdrKSx9fy68Dx9gJFRjUbKS6nvsjDAeWW8FO6y3SIUWh5BLUQzlgTuhxO4EYwCVYYdeSzPEtrhBBYOFiilNfNmgIA6C_uX5z1VHrmpOJEiprwasTvRd08SyG7OydFNPKgyLGF4ubulToEZ9lqwMXT4THfPkQ-pJ9z_m2JiUC78IBfYVUX3bCxuL4oQTu9e78VCMi8_ZQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/admin/appointments?orderBy=patient-1-DESC",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"appointments"
+							],
+							"query": [
+								{
+									"key": "orderBy",
+									"value": "patient-1-DESC"
+								}
+							]
+						},
+						"description": "To allow an admin to filter appointments by patient's oldest appointment is necessary to asign a param:\n\n- orderBy\n    \n\nRecieves a string that is divided by a \"-\":\n\npatient-1-DESC\n\n1. The word \"patient\"\n2. Patient id\n3. Order DESC"
+					},
+					"response": []
+				},
+				{
+					"name": "Order by Doctor - Newest",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdWQiOiJobXMtam9uYXRoYW5jYXN0aWxsbyIsImF1dGhfdGltZSI6MTY3MzM2ODQ0MiwidXNlcl9pZCI6InBFSk1DNllQNXhaMEVOZk9vaVJ6Wmd3OG9xdDIiLCJzdWIiOiJwRUpNQzZZUDV4WjBFTmZPb2lSelpndzhvcXQyIiwiaWF0IjoxNjczMzY4NDQyLCJleHAiOjE2NzMzNzIwNDIsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImFkbWluQGFkbWluLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.HmQdmGvi468gVewTbQ5O6TPXU3N5-jWmyGFNuY3fZkVoR6y-Zedv9IKmR081PL2NT_MqEA_mOFuqBY5WFbW1YJrg3acAgV0S-sWgkQ9hPn2KXMchpHFv6b55hS0T0UXdt6sDAfLu4x-TEhKdrKSx9fy68Dx9gJFRjUbKS6nvsjDAeWW8FO6y3SIUWh5BLUQzlgTuhxO4EYwCVYYdeSzPEtrhBBYOFiilNfNmgIA6C_uX5z1VHrmpOJEiprwasTvRd08SyG7OydFNPKgyLGF4ubulToEZ9lqwMXT4THfPkQ-pJ9z_m2JiUC78IBfYVUX3bCxuL4oQTu9e78VCMi8_ZQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/admin/appointments?orderBy=doctor-1-ASC",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"appointments"
+							],
+							"query": [
+								{
+									"key": "orderBy",
+									"value": "doctor-1-ASC"
+								}
+							]
+						},
+						"description": "To allow an admin to filter appointments by doctor's newest appointment is necessary to asign a param:\n\n- orderBy\n    \n\nRecieves a string that is divided by a \"-\":\n\ndoctor-1-ASC\n\n1. The word \"doctor\"\n2. Doctor id\n3. Order ASC"
+					},
+					"response": []
+				},
+				{
+					"name": "Order by Doctor - Oldest",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImNlOWI4ODBmODE4MmRkYTU1N2Y3YzcwZTIwZTRlMzcwZTNkMTI3NDciLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoicGF0aWVudCIsInJvbGUiOiJwYXRpZW50IiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2htcy1qb25hdGhhbmNhc3RpbGxvIiwiYXVkIjoiaG1zLWpvbmF0aGFuY2FzdGlsbG8iLCJhdXRoX3RpbWUiOjE2NzMwMzA3NjUsInVzZXJfaWQiOiJQam01ZVBkZkJiTmdQWTBQeDRtUFBmS29vU3ExIiwic3ViIjoiUGptNWVQZGZCYk5nUFkwUHg0bVBQZktvb1NxMSIsImlhdCI6MTY3MzAzMDc2NSwiZXhwIjoxNjczMDM0MzY1LCJlbWFpbCI6InBhdGllbnRAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicGF0aWVudEB0ZXN0LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.JudVQHjq9AkhOzxche6uC5lP0VMNJyRra2Gz-wdIKMapJ3lhhOfWT5HSwTA5L0YODKAtaCxF6g-_QqKjyh3QVE3Fh04Tv3aCr_L8EqpSOdv8pFwQW67pvkEVX7R5FTJ3nFh1yjDz3K2PnTUUKBdssohuvQK_GdfaRiQgj87PtPMT5UolktNJuHR3Bp-Nc6rH5qKsz1h9b82nIGuwPxON_dMW-8IAkNQd0naz4rmB9WjOI1dwhlETV6K0GrNywYYSPCuEfdWMWEEwFDjskmepHUJ6peLM6RjMQpOAF4RbjqafmUd1dOKv1kIGEQG17swI9HqOyT1RJgRR-E7Dy8-VJQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/admin/appointments?orderBy=doctor-3-DESC",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"appointments"
+							],
+							"query": [
+								{
+									"key": "orderBy",
+									"value": "doctor-3-DESC"
+								}
+							]
+						},
+						"description": "To allow an admin to filter appointments by doctor's oldest appointment is necessary to asign a param:\n\n- orderBy\n    \n\nRecieves a string that is divided by a \"-\":\n\ndoctor-1-DESC\n\n1. The word \"doctor\"\n2. Doctor id\n3. Order DESC"
+					},
+					"response": []
+				}
+			],
+			"description": "These routes will allow any admin to:\n\n1. Generate admin tokens\n2. Create new doctors\n3. Reactivate the users accounts\n4. List all the appointments"
+		}
+	]
+}
